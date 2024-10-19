@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:habbitable/Services/authentication.dart';
+import 'package:habbitable/Services/habits.dart';
 import 'package:habbitable/router.dart';
 import 'package:habbitable/style/theme.dart';
 import 'package:habbitable/utils/consts.dart';
@@ -21,6 +22,10 @@ class MyApp extends StatelessWidget {
       onInit: () {
         Get.put(
           GlobalAuthenticationService(),
+          permanent: true,
+        );
+        Get.put(
+          HabitsService(),
           permanent: true,
         );
       },

@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService extends GetxService {
   late SharedPreferences _prefs;
-  bool get isAuthenticated => _prefs.getBool("isAuthenticated") ?? false;
   Future<LocalStorageService> init() async {
     _prefs = await SharedPreferences.getInstance();
     return this;

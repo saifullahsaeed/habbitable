@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:habbitable/Services/local_storage.dart';
+import 'package:habbitable/Services/authentication.dart';
 
 class AuthMiddleware extends GetMiddleware {
   @override
@@ -8,8 +8,9 @@ class AuthMiddleware extends GetMiddleware {
 
   @override
   RouteSettings? redirect(String? route) {
-    bool isAuthenticated = Get.find<LocalStorageService>().isAuthenticated;
-    if (!isAuthenticated) {
+    bool isAuthenticated =
+        Get.find<GlobalAuthenticationService>().isAuthenticated;
+    if (isAuthenticated == false) {
       return const RouteSettings(name: '/auth');
     }
     return null;

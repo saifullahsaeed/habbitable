@@ -1,30 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:habbitable/controllers/home_controller.dart';
+import 'package:habbitable/widgets/habitcard.dart';
+import 'package:habbitable/widgets/mainappbar.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key});
+  final HomeController controller = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Title Of Page"),
-      ),
-      body: Center(
+      appBar: const MainAppBar(),
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Upcomming",
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text("See all"),
+                ),
+              ],
             ),
-            Text(
-              '0',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Obx(
+              () => Expanded(
+                child: ListView.builder(
+                  itemCount: controller.habits.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => HabbitCard(
+                    habit: controller.habits[index],
+                    onCompleted: (isCompleted) {
+                      isCompleted
+                          ? controller
+                              .completeHabit(controller.habits[index].id)
+                          : controller.undoHabit(controller.habits[index].id);
+                    },
+                  ),
+                ),
+              ),
             ),
           ],
         ),

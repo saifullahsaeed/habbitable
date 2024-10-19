@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:habbitable/screens/comunity.dart';
 import 'package:habbitable/screens/progress.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:habbitable/screens/home.dart';
@@ -9,9 +11,10 @@ class BottomNav extends StatelessWidget {
 
   List<Widget> _buildScreens() {
     return [
-      const HomeScreen(),
+      HomeScreen(),
+      const ComunityScreen(),
       const ProgressScreen(),
-      const SettingsScreen(),
+      SettingsScreen(),
     ];
   }
 
@@ -20,17 +23,22 @@ class BottomNav extends StatelessWidget {
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.home),
         title: 'Home',
-        activeColorPrimary: Colors.blue,
+        activeColorPrimary: Get.theme.colorScheme.primary,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(Icons.people),
+        title: 'Comunity',
+        activeColorPrimary: Get.theme.colorScheme.primary,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.bar_chart),
         title: 'Progress',
-        activeColorPrimary: Colors.blue,
+        activeColorPrimary: Get.theme.colorScheme.primary,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.settings),
         title: 'Settings',
-        activeColorPrimary: Colors.blue,
+        activeColorPrimary: Get.theme.colorScheme.primary,
       ),
     ];
   }
@@ -41,7 +49,11 @@ class BottomNav extends StatelessWidget {
       context,
       screens: _buildScreens(),
       items: _navBarsItems(),
-      navBarStyle: NavBarStyle.style16,
+      navBarStyle: NavBarStyle.style5,
+      backgroundColor: Get.theme.colorScheme.surface,
+      onWillPop: (value) async {
+        return false;
+      },
     );
   }
 }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:habbitable/widgets/mainappbar.dart';
 
-class ProgressScreen extends StatelessWidget {
-  const ProgressScreen({super.key});
+class ComunityScreen extends StatelessWidget {
+  const ComunityScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MainAppBar(),
       body: const Center(
-        child: Text('Progress'),
+        child: Text('Comunity'),
       ),
     );
   }

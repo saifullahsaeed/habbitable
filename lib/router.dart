@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:habbitable/controllers/home_controller.dart';
 import 'package:habbitable/middlewares/auth_middleware.dart';
 import 'package:habbitable/screens/auth/auth.dart';
 import 'package:habbitable/screens/auth/controllers/auth_controller.dart';
@@ -7,7 +8,6 @@ import 'package:habbitable/screens/auth/login.dart';
 import 'package:habbitable/screens/auth/reset_password.dart';
 import 'package:habbitable/screens/auth/signup.dart';
 import 'package:habbitable/screens/bottom_nav.dart';
-import 'package:habbitable/screens/home.dart';
 import 'package:habbitable/screens/settings.dart';
 
 final List<GetPage<dynamic>> routes = [
@@ -17,10 +17,15 @@ final List<GetPage<dynamic>> routes = [
     middlewares: [
       AuthMiddleware(),
     ],
+    bindings: [
+      BindingsBuilder(() {
+        Get.lazyPut(() => HomeController());
+      }),
+    ],
   ),
   GetPage(
     name: '/settings',
-    page: () => const SettingsScreen(),
+    page: () => SettingsScreen(),
     middlewares: [
       AuthMiddleware(),
     ],
