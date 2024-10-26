@@ -1,117 +1,84 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:habbitable/Services/authentication.dart';
+import 'package:habbitable/Services/sqlite.dart';
 import 'package:habbitable/models/habit.dart';
+import 'package:habbitable/models/habit_logs.dart';
 
 class HabitsService extends GetxController {
-  final List<Habit> _habits = [
-    Habit(
-      id: "1",
-      name: "Morning Exercise",
-      description: "Start your day with a 30-minute exercise routine.",
-      icon: Icons.run_circle,
-      color: Colors.green,
-      streak: 5,
-      goal: 30,
-      time: 30,
-      rate: "Daily",
-      lastCompleted: DateTime.now().subtract(const Duration(days: 1)),
-      nextDue: DateTime.now(),
-      isOnProbation: false,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    ),
-    Habit(
-      id: "2",
-      name: "Daily Reading",
-      description: "Spend 15 minutes reading a book.",
-      icon: Icons.book,
-      color: Colors.blue,
-      streak: 10,
-      goal: 15,
-      time: 15,
-      rate: "Daily",
-      lastCompleted: DateTime.now().subtract(const Duration(days: 1)),
-      nextDue: DateTime.now(),
-      isOnProbation: false,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    ),
-    Habit(
-      id: "3",
-      name: "Evening Meditation",
-      description: "Practice meditation for 10 minutes before bed.",
-      icon: Icons.macro_off,
-      color: Colors.purple,
-      streak: 3,
-      goal: 10,
-      time: 10,
-      rate: "Daily",
-      lastCompleted: DateTime.now().subtract(const Duration(days: 1)),
-      nextDue: DateTime.now(),
-      isOnProbation: false,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    ),
-    Habit(
-      id: "4",
-      name: "Drink Water",
-      description: "Drink 8 glasses of water a day.",
-      icon: Icons.water_drop,
-      color: Colors.orange,
-      streak: 30,
-      goal: 8,
-      time: 0,
-      rate: "Daily",
-      lastCompleted: DateTime.now().subtract(const Duration(days: 1)),
-      nextDue: DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        12,
-        0,
-      ),
-      isOnProbation: false,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    ),
-  ];
+  static const String _habitsFilePath = 'assets/data/habits.json';
+  SqliteService sqliteService = Get.find<SqliteService>();
+  GlobalAuthenticationService authService =
+      Get.find<GlobalAuthenticationService>();
 
-  List<Habit> get habits => _habits;
+  @override
+  void onInit() {
+    super.onInit();
+    // testInsert();
+  }
+
   Future<List<Habit>> getHabits() async {
     await Future.delayed(const Duration(milliseconds: 200));
-    return _habits;
+    final int userId = (await authService.currentUser()).id;
+    final List<Habit> habits = await sqliteService.getHabits(userId);
+    return habits;
+  }
+
+  Future<void> testInsert() async {
+    final int userId = (await authService.currentUser()).id;
+    final HabitLog habitLog = HabitLog(id: 1, habitId: 1, action: 'complete');
+    await sqliteService.insertHabitLog(habitLog, userId);
+    // print(habits);
+  }
+
+  Future<void> _saveHabits(List<dynamic> habits) async {
+    final file = File(_habitsFilePath);
+    await file.writeAsString(jsonEncode(habits));
   }
 
   Future<void> createHabit(Habit habit) async {
-    _habits.add(habit);
+    final habits = await getHabits();
+    habits.add(habit);
+    await _saveHabits(habits.map((h) => h.toJson()).toList());
   }
 
   Future<void> updateHabit(Habit habit) async {
-    _habits.removeWhere((h) => h.id == habit.id);
-    _habits.add(habit);
+    //read json file
+    final json = await rootBundle.loadString(_habitsFilePath);
+    final List<dynamic> habits = jsonDecode(json);
+    habits.removeWhere((h) => h['id'] == habit.id);
+    habits.add(habit.toJson());
+    await _saveHabits(habits);
   }
 
   Future<void> deleteHabit(String id) async {
-    _habits.removeWhere((h) => h.id == id);
+    //read json file
+    final json = await rootBundle.loadString(_habitsFilePath);
+    final List<dynamic> habits = jsonDecode(json);
+    habits.removeWhere((h) => h['id'] == id);
+    await _saveHabits(habits);
   }
 
   Future<void> completeHabit(String id) async {
-    _habits.firstWhere((h) => h.id == id).streak++;
-    _habits.firstWhere((h) => h.id == id).lastCompleted = DateTime.now();
-    _habits.firstWhere((h) => h.id == id).nextDue = DateTime.now().add(
-      const Duration(
-        days: 1,
-      ),
-    );
+    final int userId = (await authService.currentUser()).id;
+    final HabitLog habitLog =
+        HabitLog(habitId: int.parse(id), action: 'complete');
+    await sqliteService.insertHabitLog(habitLog, userId);
   }
 
   Future<void> undoHabit(String id) async {
-    _habits.firstWhere((h) => h.id == id).streak--;
-    _habits.firstWhere((h) => h.id == id).lastCompleted = DateTime.now();
-    _habits.firstWhere((h) => h.id == id).nextDue = DateTime.now().add(
-      const Duration(
-        days: 1,
-      ),
-    );
+    final int userId = (await authService.currentUser()).id;
+    final HabitLog habitLog =
+        HabitLog(habitId: int.parse(id), action: 'reverse');
+    await sqliteService.insertHabitLog(habitLog, userId);
+  }
+
+  Future<List<HabitLog>> getHabitLogsRange(
+      int habitId, DateTime startDate, DateTime endDate) async {
+    final List<HabitLog> habitLogs = await sqliteService
+        .getHabitLogsByDateRange(startDate, endDate, habitId);
+    return habitLogs;
   }
 }

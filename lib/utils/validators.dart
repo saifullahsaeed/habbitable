@@ -23,3 +23,19 @@ Function(String?) passwordValidator = (String? value) {
   }
   return null;
 };
+
+Function(String?) nameValidator = (String? value) {
+  if (value == null) {
+    return 'Please enter your name';
+  }
+  if (value.isEmpty) {
+    return 'Please enter your name';
+  }
+  if (value.length < 3) {
+    return 'Name must be at least 3 characters';
+  }
+  if (value.length > 20) {
+    return 'Name must be less than 20 characters';
+  }
+  return null;
+};

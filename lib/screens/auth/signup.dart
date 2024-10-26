@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:habbitable/screens/auth/controllers/auth_controller.dart';
 import 'package:habbitable/style/text.dart';
+import 'package:habbitable/utils/load_action.dart';
+import 'package:habbitable/utils/validators.dart';
 import 'package:habbitable/widgets/button.dart';
 import 'package:habbitable/widgets/input.dart';
 
@@ -12,6 +15,11 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final signupFormKey = GlobalKey<FormState>();
+  final AuthController controller = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +30,7 @@ class _SignupScreenState extends State<SignupScreen> {
             width: Get.width,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Form(
+              key: signupFormKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -40,7 +49,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     label: 'Name',
                     hint: 'Enter your name',
                     inputType: TextInputType.text,
-                    controller: TextEditingController(),
+                    controller: nameController,
+                    validator: (value) => nameValidator(value),
                     context: context,
                   ),
                   const SizedBox(height: 10),
@@ -48,7 +58,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     label: 'Email',
                     hint: 'Enter your email',
                     inputType: TextInputType.emailAddress,
-                    controller: TextEditingController(),
+                    controller: emailController,
+                    validator: (value) => emailValidator(value),
                     context: context,
                   ),
                   const SizedBox(height: 10),
@@ -56,9 +67,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     label: 'Password',
                     hint: 'Enter your password',
                     inputType: TextInputType.visiblePassword,
-                    controller: TextEditingController(),
+                    controller: passwordController,
                     isPassword: true,
                     context: context,
+                    validator: (value) => passwordValidator(value),
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
@@ -66,7 +78,15 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: MainButton(
                       label: 'Signup',
                       icon: Icons.person_add,
-                      onPressed: () {},
+                      onPressed: () {
+                        if (signupFormKey.currentState!.validate()) {
+                          controller.signup(
+                            nameController.text,
+                            emailController.text,
+                            passwordController.text,
+                          );
+                        }
+                      },
                     ),
                   ),
                   const SizedBox(height: 20),

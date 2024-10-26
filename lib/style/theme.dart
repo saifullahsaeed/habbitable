@@ -29,6 +29,7 @@ ThemeData lightTheme = ThemeData(
       iconColor: WidgetStatePropertyAll(onPrimaryColor),
     ),
   ),
+  cardColor: cardColor,
   inputDecorationTheme: const InputDecorationTheme(
     border: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(6)),
@@ -87,4 +88,5 @@ ThemeData darkTheme = ThemeData(
       iconColor: WidgetStatePropertyAll(onPrimaryColor),
     ),
   ),
+  cardColor: cardColorDark,
 );

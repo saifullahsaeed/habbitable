@@ -31,10 +31,7 @@ class _HabbitCardState extends State<HabbitCard> {
       child: InkWell(
         splashColor: Get.theme.colorScheme.primary,
         onTap: () {
-          widget.onCompleted(!isCompleted);
-          setState(() {
-            isCompleted = !isCompleted;
-          });
+          Get.toNamed('/habit', arguments: {'habit': widget.habit});
         },
         onLongPress: () {
           widget.onCompleted(!isCompleted);

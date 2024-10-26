@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:habbitable/screens/auth/controllers/auth_controller.dart';
 import 'package:habbitable/style/text.dart';
-import 'package:habbitable/utils/load_action.dart';
 import 'package:habbitable/utils/validators.dart';
 import 'package:habbitable/widgets/button.dart';
 import 'package:habbitable/widgets/input.dart';
@@ -10,7 +9,9 @@ import 'package:habbitable/widgets/input.dart';
 class LoginScreen extends GetView<AuthController> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final loginFormKey = GlobalKey<FormState>();
   LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +22,7 @@ class LoginScreen extends GetView<AuthController> {
             width: Get.width,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Form(
-              key: controller.loginFormKey,
+              key: loginFormKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -60,11 +61,11 @@ class LoginScreen extends GetView<AuthController> {
                     child: MainButton(
                       label: 'Login',
                       onPressed: () {
-                        if (controller.loginFormKey.currentState!.validate()) {
-                          loadAction(controller.login(
+                        if (loginFormKey.currentState!.validate()) {
+                          controller.login(
                             emailController.text,
                             passwordController.text,
-                          ));
+                          );
                         }
                       },
                       icon: Icons.login_rounded,
@@ -82,7 +83,7 @@ class LoginScreen extends GetView<AuthController> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Get.toNamed('/auth/register');
+                          Get.toNamed('/auth/signup');
                         },
                         child: const Text('Create Account'),
                       ),

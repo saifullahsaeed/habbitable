@@ -35,15 +35,18 @@ class HomeScreen extends StatelessWidget {
             Obx(
               () => Expanded(
                 child: ListView.builder(
-                  itemCount: controller.habits.length,
+                  itemCount: controller.habitsTodaysUpcoming.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) => HabbitCard(
-                    habit: controller.habits[index],
+                    habit: controller.habitsTodaysUpcoming[index],
                     onCompleted: (isCompleted) {
                       isCompleted
-                          ? controller
-                              .completeHabit(controller.habits[index].id)
-                          : controller.undoHabit(controller.habits[index].id);
+                          ? controller.completeHabit(controller
+                              .habitsTodaysUpcoming[index].id
+                              .toString())
+                          : controller.undoHabit(controller
+                              .habitsTodaysUpcoming[index].id
+                              .toString());
                     },
                   ),
                 ),
@@ -51,6 +54,12 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.toNamed('/createhabit');
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

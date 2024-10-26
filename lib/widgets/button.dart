@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MainButton extends StatelessWidget {
+class MainButton extends StatefulWidget {
   final String label;
   final IconData icon;
   final VoidCallback onPressed;
@@ -18,21 +18,26 @@ class MainButton extends StatelessWidget {
   });
 
   @override
+  State<MainButton> createState() => _MainButtonState();
+}
+
+class _MainButtonState extends State<MainButton> {
+  @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
-      label: Text(label),
-      icon: Icon(icon),
+      label: Text(widget.label),
+      icon: Icon(widget.icon),
       iconAlignment:
-          iconSide == 'start' ? IconAlignment.start : IconAlignment.end,
+          widget.iconSide == 'start' ? IconAlignment.start : IconAlignment.end,
       style: ElevatedButton.styleFrom(
-        backgroundColor: style == 'primary'
+        backgroundColor: widget.style == 'primary'
             ? Get.theme.colorScheme.primary
             : Get.theme.colorScheme.secondary,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(6)),
         ),
       ),
-      onPressed: onPressed,
+      onPressed: widget.onPressed,
     );
   }
 }

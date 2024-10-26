@@ -14,6 +14,17 @@ class HomeController extends GetxController {
     getHabits();
   }
 
+  List<Habit> get habitsTodaysUpcoming {
+    final today = DateTime.now();
+
+    final lateHabits = _habits
+        .where((h) => h.nextDue.isBefore(today.add(const Duration(hours: 1))))
+        .toList();
+    final upcomingHabits =
+        _habits.where((h) => h.nextDue.isAfter(today)).toList();
+    return [...lateHabits, ...upcomingHabits];
+  }
+
   Future<void> getHabits() async {
     _habits.value = await habitsService.getHabits();
   }
@@ -34,12 +45,17 @@ class HomeController extends GetxController {
   }
 
   Future<void> completeHabit(String id) async {
+    Habit habit = _habits.firstWhere((h) => h.id == int.parse(id));
+    habit.lastCompleted = DateTime.now();
+    habit.streak = habit.streak + 1;
     await habitsService.completeHabit(id);
-    getHabits();
   }
 
   Future<void> undoHabit(String id) async {
+    Habit habit = _habits.firstWhere((h) => h.id == int.parse(id));
+    if (habit.streak > 0) {
+      habit.streak = habit.streak - 1;
+    }
     await habitsService.undoHabit(id);
-    getHabits();
   }
 }
