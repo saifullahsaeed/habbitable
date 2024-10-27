@@ -6,13 +6,15 @@ import 'package:habbitable/Services/authentication.dart';
 import 'package:habbitable/Services/sqlite.dart';
 import 'package:habbitable/models/habit.dart';
 import 'package:habbitable/models/habit_logs.dart';
+import 'package:habbitable/repos/habits.dart';
+import 'package:habbitable/utils/snackbar.dart';
 
 class HabitsService extends GetxController {
   static const String _habitsFilePath = 'assets/data/habits.json';
   SqliteService sqliteService = Get.find<SqliteService>();
   GlobalAuthenticationService authService =
       Get.find<GlobalAuthenticationService>();
-
+  HabitsRepository habitsRepository = HabitsRepository();
   @override
   void onInit() {
     super.onInit();
@@ -20,9 +22,9 @@ class HabitsService extends GetxController {
   }
 
   Future<List<Habit>> getHabits() async {
-    await Future.delayed(const Duration(milliseconds: 200));
-    final int userId = (await authService.currentUser()).id;
-    final List<Habit> habits = await sqliteService.getHabits(userId);
+    final res = await habitsRepository.getHabits();
+    final List<Habit> habits =
+        res.data.map((h) => Habit.fromJson(h)).toList().cast<Habit>();
     return habits;
   }
 
@@ -39,9 +41,21 @@ class HabitsService extends GetxController {
   }
 
   Future<void> createHabit(Habit habit) async {
-    final habits = await getHabits();
-    habits.add(habit);
-    await _saveHabits(habits.map((h) => h.toJson()).toList());
+    try {
+      await habitsRepository.createHabit(habit);
+      showSnackBar(
+        title: 'Success',
+        message: 'Habit created successfully',
+        type: 'success',
+      );
+      Get.back();
+    } catch (e) {
+      showSnackBar(
+        title: 'Error',
+        message: e.toString(),
+        type: 'error',
+      );
+    }
   }
 
   Future<void> updateHabit(Habit habit) async {

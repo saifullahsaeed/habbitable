@@ -11,10 +11,10 @@ class Habit {
   int streak;
   final int goal;
   final int time;
-  final String rate;
+  final String frequency;
   DateTime? lastCompleted;
   DateTime nextDue;
-  final DateTime reminderTime;
+  final TimeOfDay reminderTime;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -28,7 +28,7 @@ class Habit {
     required this.streak,
     required this.goal,
     required this.time,
-    required this.rate,
+    required this.frequency,
     this.lastCompleted,
     required this.nextDue,
     required this.reminderTime,
@@ -51,23 +51,23 @@ class Habit {
       name: json['name'],
       description: json['description'],
       icon: json['icon'] != null
-          ? iconDataFromString(json['icon'], json['icon_font_family'])
+          ? iconDataFromString(int.parse(json['icon']), json['iconFontFamily'])
           : Icons.star,
-      iconFontFamily: json['icon_font_family'] ?? "MaterialIcons",
+      iconFontFamily: json['iconFontFamily'] ?? "MaterialIcons",
       color: json['color'] != null
           ? Color(int.parse(json['color'], radix: 16))
           : Colors.blue,
       streak: json['streak'],
-      goal: json['goal'],
-      time: json['time'],
-      rate: json['rate'],
+      goal: json['goal'] ?? 0,
+      time: json['time'] ?? 10,
+      frequency: json['frequency'],
       lastCompleted: json['lastCompleted'] != null
           ? DateTime.parse(json['lastCompleted'])
           : null,
       nextDue: DateTime.parse(json['nextDue']),
-      reminderTime: DateTime.parse(json['reminder_time']),
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      reminderTime: timeOfDayFromString(json['reminderTime']),
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
 
@@ -75,13 +75,47 @@ class Habit {
     return {
       'name': name,
       'description': description,
-      'icon': icon.codePoint,
-      'icon_font_family': iconFontFamily,
+      'target': goal,
+      'frequency': frequency,
+      'reminderTime': timeOfDayToString(reminderTime),
+      'icon': icon.codePoint.toString(),
+      'iconFontFamily': iconFontFamily,
       'color': color.value.toRadixString(16),
-      'goal': goal,
-      'time': time,
-      'rate': rate,
-      'reminder_time': reminderTime.toIso8601String(),
+      'startDate': createdAt.toIso8601String(),
     };
+  }
+
+  static Habit copyWith(Habit habit, Map<String, dynamic> updates) {
+    return Habit(
+      id: updates['id'] ?? habit.id,
+      name: updates['name'] ?? habit.name,
+      description: updates['description'] ?? habit.description,
+      icon: updates['icon'] != null
+          ? iconDataFromString(updates['icon'], updates['iconFontFamily'])
+          : habit.icon,
+      iconFontFamily: updates['iconFontFamily'] ?? habit.iconFontFamily,
+      color: updates['color'] != null
+          ? Color(int.parse(updates['color'], radix: 16))
+          : habit.color,
+      streak: updates['streak'] ?? habit.streak,
+      goal: updates['goal'] ?? habit.goal,
+      time: updates['time'] ?? habit.time,
+      frequency: updates['frequency'] ?? habit.frequency,
+      lastCompleted: updates['lastCompleted'] != null
+          ? DateTime.parse(updates['lastCompleted'])
+          : habit.lastCompleted,
+      nextDue: updates['nextDue'] != null
+          ? DateTime.parse(updates['nextDue'])
+          : habit.nextDue,
+      reminderTime: updates['reminderTime'] != null
+          ? timeOfDayFromString(updates['reminderTime'])
+          : habit.reminderTime,
+      createdAt: updates['createdAt'] != null
+          ? DateTime.parse(updates['createdAt'])
+          : habit.createdAt,
+      updatedAt: updates['updatedAt'] != null
+          ? DateTime.parse(updates['updatedAt'])
+          : habit.updatedAt,
+    );
   }
 }

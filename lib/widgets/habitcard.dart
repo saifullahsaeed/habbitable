@@ -6,10 +6,12 @@ import 'package:habbitable/utils/functions.dart';
 class HabbitCard extends StatefulWidget {
   final Habit habit;
   final Function(bool) onCompleted;
+  final bool disabled;
   const HabbitCard({
     super.key,
     required this.habit,
     required this.onCompleted,
+    this.disabled = false,
   });
 
   @override
@@ -31,13 +33,17 @@ class _HabbitCardState extends State<HabbitCard> {
       child: InkWell(
         splashColor: Get.theme.colorScheme.primary,
         onTap: () {
-          Get.toNamed('/habit', arguments: {'habit': widget.habit});
+          if (!widget.disabled) {
+            Get.toNamed('/habit', arguments: {'habit': widget.habit});
+          }
         },
         onLongPress: () {
-          widget.onCompleted(!isCompleted);
-          setState(() {
-            isCompleted = !isCompleted;
-          });
+          if (!widget.disabled) {
+            widget.onCompleted(!isCompleted);
+            setState(() {
+              isCompleted = !isCompleted;
+            });
+          }
         },
         borderRadius: BorderRadius.circular(10),
         child: Container(
@@ -45,14 +51,7 @@ class _HabbitCardState extends State<HabbitCard> {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [
-                widget.habit.color.withOpacity(0.7),
-                Get.theme.colorScheme.primary.withOpacity(0.7),
-              ],
-            ),
+            color: widget.habit.color.withOpacity(0.7),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -80,7 +79,7 @@ class _HabbitCardState extends State<HabbitCard> {
                           color: Get.theme.colorScheme.surface,
                         ),
                         child: Text(
-                          widget.habit.rate,
+                          widget.habit.frequency,
                           style: const TextStyle(
                             fontWeight: FontWeight.w100,
                             fontSize: 12,

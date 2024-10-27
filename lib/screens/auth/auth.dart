@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:habbitable/Services/theme.dart';
 import 'package:habbitable/style/text.dart';
 import 'package:habbitable/widgets/button.dart';
+import 'package:lottie/lottie.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
@@ -14,14 +16,13 @@ class AuthScreen extends StatelessWidget {
         children: [
           Flexible(
             flex: 3,
-            child: Container(
-              clipBehavior: Clip.antiAlias,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/habit.jpg'),
-                  fit: BoxFit.fitWidth,
-                ),
-              ),
+            child: Lottie.asset(
+              Get.find<ThemeService>().theme == 2
+                  ? "assets/animations/auth_dark.json"
+                  : "assets/animations/auth.json",
+              frameRate: FrameRate(30),
+              height: Get.height,
+              width: Get.width,
             ),
           ),
           Flexible(
@@ -34,12 +35,12 @@ class AuthScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Welcome to App',
+                      'Welcome to Habbitable',
                       style: titleTextStyle,
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      'The best app to track your habits',
+                      'Build habits and streaks with friends',
                       style: subtitleTextStyle,
                     ),
                     const SizedBox(height: 20),

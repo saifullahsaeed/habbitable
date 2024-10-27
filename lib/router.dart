@@ -9,7 +9,7 @@ import 'package:habbitable/screens/auth/reset_password.dart';
 import 'package:habbitable/screens/auth/signup.dart';
 import 'package:habbitable/screens/bottom_nav.dart';
 import 'package:habbitable/screens/habit/controllers/controller.dart';
-import 'package:habbitable/screens/habit/cretate.dart';
+import 'package:habbitable/screens/habit/create.dart';
 import 'package:habbitable/screens/habit/habit.dart';
 import 'package:habbitable/screens/settings.dart';
 

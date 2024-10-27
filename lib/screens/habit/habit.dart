@@ -134,7 +134,7 @@ class HabitScreen extends GetView<HabitScreenController> {
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          habit.rate,
+                          habit.frequency,
                           style: Get.theme.textTheme.bodySmall,
                         ),
                       ],

@@ -74,3 +74,27 @@ bool isSameDay(DateTime date1, DateTime date2) {
 String formatDate(DateTime date) {
   return '${date.day.toString().padLeft(2, '0')} ${monthFromNumber(date.month)} ${date.year}';
 }
+
+TimeOfDay timeOfDayFromString(String time) {
+  final parts = time.split(':');
+  final hour = int.parse(parts[0]);
+  final minute = int.parse(parts[1].split(' ')[0]);
+  final period = parts[1].split(' ')[1].toUpperCase();
+  final adjustedHour = period == 'PM' && hour != 12 ? hour + 12 : hour;
+  return TimeOfDay(hour: adjustedHour, minute: minute);
+}
+
+TimeOfDay timeOfDayFromDateTime(DateTime date) {
+  return TimeOfDay(hour: date.hour, minute: date.minute);
+}
+
+String timeOfDayToString(TimeOfDay time) {
+  final String ampm = time.hour >= 12 ? 'PM' : 'AM';
+  final int adjustedHour = time.hour > 12 ? time.hour - 12 : time.hour;
+  return '${adjustedHour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')} $ampm';
+}
+
+DateTime dateTimeFromTimeOfDay(TimeOfDay time) {
+  return DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,
+      time.hour, time.minute);
+}

@@ -1,10 +1,23 @@
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HttpWrapper {
   final String baseUrl = "http://localhost:3000/";
   final int timeout = 10000; //timeout in milliseconds 1s = 1000ms
   final String contentType = "application/json";
   final Dio dio = Dio();
+  late Future<SharedPreferences> sharedPreferences;
+
+  HttpWrapper() {
+    sharedPreferences = SharedPreferences.getInstance();
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        final token = (await sharedPreferences).getString('token') ?? '';
+        options.headers['Authorization'] = 'Bearer $token';
+        return handler.next(options);
+      },
+    ));
+  }
 
   Future<Response> get(String path,
       {Map<String, dynamic>? queryParameters}) async {
@@ -18,7 +31,8 @@ class HttpWrapper {
     );
   }
 
-  Future<Response> post(String path, {Map<String, dynamic>? data}) async {
+  Future<Response> post(String path,
+      {Map<String, dynamic>? data, bool auth = true}) async {
     try {
       return await dio.post(
         baseUrl + path,
