@@ -10,8 +10,6 @@ import 'package:habbitable/utils/snackbar.dart';
 class GlobalAuthenticationService extends GetxController {
   bool get isAuthenticated =>
       Get.find<LocalStorageService>().getData("token") != null;
-  int get userId =>
-      Get.find<LocalStorageService>().getData("user")['id'] as int;
   LocalStorageService localStorageService = Get.find<LocalStorageService>();
   SqliteService sqliteService = Get.find<SqliteService>();
   AuthRepository authRepository = AuthRepository();
@@ -35,6 +33,8 @@ class GlobalAuthenticationService extends GetxController {
       final response = await authRepository
           .login(LoginModel(email: email, password: password));
       localStorageService.setData("token", response.data['access_token']);
+      localStorageService.setData(
+          "refresh_token", response.data['refresh_token']);
       localStorageService.setData("user", response.data['user']);
       Get.offAllNamed('/');
     } catch (e) {
@@ -42,12 +42,26 @@ class GlobalAuthenticationService extends GetxController {
     }
   }
 
-  Future<User> currentUser() async {
+  Future<int> refreshToken() async {
+    try {
+      final response = await authRepository
+          .refreshToken(localStorageService.getData("refresh_token"));
+      localStorageService.setData("token", response.data['access_token']);
+      localStorageService.setData(
+          "refresh_token", response.data['refresh_token']);
+      return 1;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  User get currentUser {
     final userData = localStorageService.getData("user") as String;
     return User.fromJson(jsonDecode(userData));
   }
 
-  Future<void> logout() async {
+  void logout() {
+    authRepository.logout();
     localStorageService.clearData();
     Get.offAllNamed('/auth');
   }

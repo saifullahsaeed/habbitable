@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:habbitable/Services/authentication.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HttpWrapper {
@@ -16,6 +17,11 @@ class HttpWrapper {
         options.headers['Authorization'] = 'Bearer $token';
         return handler.next(options);
       },
+      // onError: (DioException e, ErrorInterceptorHandler handler) async {
+      //   if (e.response?.statusCode == 401) {
+      //     return handler.next(e);
+      //   }
+      // },
     ));
   }
 

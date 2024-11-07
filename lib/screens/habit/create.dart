@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:habbitable/Services/authentication.dart';
 import 'package:habbitable/controllers/home_controller.dart';
 import 'package:habbitable/models/habit.dart';
 import 'package:habbitable/utils/functions.dart';
@@ -50,9 +51,12 @@ class _CreateHabitScreenState extends State<CreateHabitScreen> {
       iconFontFamily: _selectedIcon.fontFamily ?? 'MaterialIcons',
       color: Get.theme.colorScheme.primary,
       frequency: _rate,
+      owner: Get.find<GlobalAuthenticationService>().currentUser,
+      users: [],
       nextDue:
           DateTime.now().add(Duration(days: 1)).copyWith(hour: 10, minute: 0),
       reminderTime: TimeOfDay(hour: 10, minute: 0),
+      customDays: _customDays,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
@@ -113,14 +117,59 @@ class _CreateHabitScreenState extends State<CreateHabitScreen> {
                       if (_customDays.contains(value)) {
                         setState(() {
                           _customDays.remove(value);
+                          _updateHabit({'customDays': _customDays});
                         });
                       } else {
                         setState(() {
                           _customDays.add(value);
+                          _updateHabit({'customDays': _customDays});
                         });
                       }
                     },
                   ),
+                if (_rate == 'weekly')
+                  DaysOfWeekSelector(
+                    selectedDays: _customDays,
+                    onChanged: (value) {
+                      if (_customDays.contains(value)) {
+                        setState(() {
+                          _customDays.clear();
+                          _customDays.add(value);
+                          _updateHabit({'customDays': _customDays});
+                        });
+                      } else {
+                        setState(() {
+                          _customDays.clear();
+                          _customDays.add(value);
+                          _updateHabit({'customDays': _customDays});
+                        });
+                      }
+                    },
+                  ),
+                if (_rate == 'biweekly')
+                  DaysOfWeekSelector(
+                    selectedDays: _customDays,
+                    onChanged: (value) {
+                      if (_customDays.contains(value)) {
+                        setState(() {
+                          _customDays.remove(value);
+                          _updateHabit({'customDays': _customDays});
+                        });
+                      } else {
+                        setState(() {
+                          if (_customDays.length < 2) {
+                            _customDays.add(value);
+                            _updateHabit({'customDays': _customDays});
+                          } else {
+                            _customDays.removeAt(0);
+                            _customDays.add(value);
+                            _updateHabit({'customDays': _customDays});
+                          }
+                        });
+                      }
+                    },
+                  ),
+                const SizedBox(height: 10),
                 Row(
                   children: <Widget>[
                     Checkbox(
@@ -327,7 +376,10 @@ class _CreateHabitScreenState extends State<CreateHabitScreen> {
           context: context,
           items: ['daily', 'weekly', 'biweekly', 'monthly', 'custom'],
           value: _rate,
-          onChanged: (value) => setState(() => _rate = value!),
+          onChanged: (value) => setState(() {
+            _rate = value!;
+            _updateHabit({'frequency': value});
+          }),
         ),
       ],
     );

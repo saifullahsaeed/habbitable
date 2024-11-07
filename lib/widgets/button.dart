@@ -3,18 +3,20 @@ import 'package:get/get.dart';
 
 class MainButton extends StatefulWidget {
   final String label;
-  final IconData icon;
+  final IconData? icon;
   final VoidCallback onPressed;
   final String style;
+  final bool isLoading;
   // ignore: prefer_typing_uninitialized_variables
   final iconSide;
   const MainButton({
     super.key,
     required this.label,
-    required this.icon,
     required this.onPressed,
+    this.icon,
     this.style = 'primary',
     this.iconSide = 'start',
+    this.isLoading = false,
   });
 
   @override
@@ -26,7 +28,7 @@ class _MainButtonState extends State<MainButton> {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       label: Text(widget.label),
-      icon: Icon(widget.icon),
+      icon: widget.icon != null ? Icon(widget.icon) : null,
       iconAlignment:
           widget.iconSide == 'start' ? IconAlignment.start : IconAlignment.end,
       style: ElevatedButton.styleFrom(
@@ -36,8 +38,9 @@ class _MainButtonState extends State<MainButton> {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(6)),
         ),
+        disabledBackgroundColor: Get.theme.colorScheme.primary.withOpacity(0.5),
       ),
-      onPressed: widget.onPressed,
+      onPressed: widget.isLoading ? () {} : widget.onPressed,
     );
   }
 }
@@ -114,6 +117,43 @@ class TextButtonCustom extends StatelessWidget {
           color: style == 'primary'
               ? Get.theme.colorScheme.primary
               : Get.theme.colorScheme.secondary,
+        ),
+      ),
+    );
+  }
+}
+
+class OutlinedButtonCustom extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+  final Color? color;
+  const OutlinedButtonCustom({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        backgroundColor: color == null
+            ? Get.theme.colorScheme.surface
+            : color!.withOpacity(0.1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        side: BorderSide(
+          color: color ?? Get.theme.colorScheme.onSurface,
+          width: 1.0,
+        ),
+      ),
+      child: Text(
+        label,
+        style: Get.textTheme.bodySmall!.copyWith(
+          color: color ?? Get.theme.colorScheme.onSurface,
         ),
       ),
     );

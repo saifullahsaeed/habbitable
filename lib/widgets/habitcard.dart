@@ -38,10 +38,10 @@ class _HabbitCardState extends State<HabbitCard> {
           }
         },
         onLongPress: () {
-          if (!widget.disabled) {
-            widget.onCompleted(!isCompleted);
+          if (!widget.disabled && !isCompleted) {
+            widget.onCompleted(true);
             setState(() {
-              isCompleted = !isCompleted;
+              isCompleted = true;
             });
           }
         },
@@ -160,7 +160,7 @@ class _HabbitCardState extends State<HabbitCard> {
                     width: 5,
                   ),
                   Text(
-                    "5 minutes",
+                    "${widget.habit.time} minutes",
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
                           fontWeight: FontWeight.w200,
                         ),

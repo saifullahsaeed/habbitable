@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:habbitable/models/habit.dart';
+import 'package:habbitable/models/habit_logs.dart';
 import 'package:habbitable/utils/api_client.dart';
 
 class HabitsRepository {
@@ -21,5 +22,9 @@ class HabitsRepository {
 
   Future<Response> deleteHabit(int id) async {
     return await httpWrapper.delete('$base$id');
+  }
+
+  Future<Response> completeHabit(HabitLog habitLog) async {
+    return await httpWrapper.post('$base' 'log', data: habitLog.toJson());
   }
 }

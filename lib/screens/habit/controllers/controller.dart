@@ -29,4 +29,8 @@ class HabitScreenController extends GetxController {
     selectedDayLogs.value = logs;
     update();
   }
+
+  Future<void> deleteHabit(int habitId) async {
+    await habitsService.deleteHabit(habitId.toString());
+  }
 }

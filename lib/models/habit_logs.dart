@@ -6,7 +6,7 @@ class HabitLog {
   final User? user;
   final DateTime? date;
   final String action;
-  final Habit? habit;
+  final HabitLog? reversedLog;
   final int habitId;
   final bool? isLate;
   final String? note;
@@ -16,7 +16,7 @@ class HabitLog {
     this.user,
     this.date,
     required this.action,
-    this.habit,
+    this.reversedLog,
     required this.habitId,
     this.isLate,
     this.note,
@@ -28,7 +28,9 @@ class HabitLog {
       user: json['user'] != null ? User.fromJson(json['user']) : null,
       date: json['date'] != null ? DateTime.parse(json['date']) : null,
       action: json['action'],
-      habit: json['habit'] != null ? Habit.fromJson(json['habit']) : null,
+      reversedLog: json['reversed_log'] != null
+          ? HabitLog.fromJson(json['reversed_log'])
+          : null,
       habitId: json['habit_id'] ?? json['habit']['id'],
       isLate: json['isLate'],
       note: json['note'],
@@ -38,7 +40,7 @@ class HabitLog {
   Map<String, dynamic> toJson() {
     return {
       'action': action,
-      'habit_id': habitId,
+      'habitId': habitId,
       'note': note,
     };
   }

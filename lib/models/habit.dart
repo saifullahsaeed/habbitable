@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:habbitable/models/user.dart';
 import 'package:habbitable/utils/functions.dart';
 
 class Habit {
@@ -14,6 +15,9 @@ class Habit {
   final String frequency;
   DateTime? lastCompleted;
   DateTime nextDue;
+  User owner;
+  List<User> users;
+  List<String> customDays;
   final TimeOfDay reminderTime;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -32,6 +36,9 @@ class Habit {
     this.lastCompleted,
     required this.nextDue,
     required this.reminderTime,
+    required this.owner,
+    required this.users,
+    required this.customDays,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -62,12 +69,19 @@ class Habit {
       time: json['time'] ?? 10,
       frequency: json['frequency'],
       lastCompleted: json['lastCompleted'] != null
-          ? DateTime.parse(json['lastCompleted'])
+          ? DateTime.parse(json['lastCompleted']).toLocal()
           : null,
-      nextDue: DateTime.parse(json['nextDue']),
+      nextDue: DateTime.parse(json['nextDue']).toLocal(),
       reminderTime: timeOfDayFromString(json['reminderTime']),
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
+      owner: User.fromJson(json['owner']),
+      users: json['users'] != null
+          ? List<User>.from(json['users'].map((u) => User.fromJson(u)))
+          : [],
+      customDays: json['customDays'] != null
+          ? (json['customDays'] as String).split(',')
+          : [],
+      createdAt: DateTime.parse(json['createdAt']).toLocal(),
+      updatedAt: DateTime.parse(json['updatedAt']).toLocal(),
     );
   }
 
@@ -82,6 +96,7 @@ class Habit {
       'iconFontFamily': iconFontFamily,
       'color': color.value.toRadixString(16),
       'startDate': createdAt.toIso8601String(),
+      'customDays': customDays.join(','),
     };
   }
 
@@ -110,6 +125,15 @@ class Habit {
       reminderTime: updates['reminderTime'] != null
           ? timeOfDayFromString(updates['reminderTime'])
           : habit.reminderTime,
+      owner: updates['owner'] != null
+          ? User.fromJson(updates['owner'])
+          : habit.owner,
+      users: updates['users'] != null
+          ? List<User>.from(updates['users'].map((u) => User.fromJson(u)))
+          : habit.users,
+      customDays: updates['customDays'] != null
+          ? (updates['customDays'])
+          : habit.customDays,
       createdAt: updates['createdAt'] != null
           ? DateTime.parse(updates['createdAt'])
           : habit.createdAt,

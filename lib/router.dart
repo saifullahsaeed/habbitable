@@ -11,6 +11,9 @@ import 'package:habbitable/screens/bottom_nav.dart';
 import 'package:habbitable/screens/habit/controllers/controller.dart';
 import 'package:habbitable/screens/habit/create.dart';
 import 'package:habbitable/screens/habit/habit.dart';
+import 'package:habbitable/screens/habit/users.dart';
+import 'package:habbitable/screens/profile/edit.dart';
+import 'package:habbitable/screens/profile/profile.dart';
 import 'package:habbitable/screens/settings.dart';
 
 final List<GetPage<dynamic>> routes = [
@@ -42,6 +45,15 @@ final List<GetPage<dynamic>> routes = [
       BindingsBuilder(() {
         Get.lazyPut(() => HabitScreenController());
       }),
+    ],
+    children: [
+      GetPage(
+        name: '/users',
+        page: () => HabitUsersScreen(
+          habit: Get.arguments['habit'],
+        ),
+        showCupertinoParallax: false,
+      ),
     ],
   ),
   GetPage(
@@ -96,5 +108,18 @@ final List<GetPage<dynamic>> routes = [
         ],
       ),
     ],
+  ),
+  GetPage(
+    name: '/editprofile',
+    page: () => EditProfileScreen(
+      user: Get.arguments['user'],
+    ),
+  ),
+  GetPage(
+    name: '/profile/:userId',
+    page: () => ProfileScreen(
+      userId: int.parse(Get.parameters['userId']!),
+      user: Get.arguments['user'],
+    ),
   ),
 ];

@@ -6,12 +6,16 @@ class HomeController extends GetxController {
   final HabitsService habitsService = Get.find<HabitsService>();
   final RxList<Habit> _habits = <Habit>[].obs;
 
-  List<Habit> get habits => _habits;
+  RxList<Habit> get habits => _habits;
 
   @override
   void onInit() {
     super.onInit();
     getHabits();
+  }
+
+  void removeHabit(int habitId) {
+    _habits.removeWhere((h) => h.id == habitId);
   }
 
   List<Habit> get habitsTodaysUpcoming {

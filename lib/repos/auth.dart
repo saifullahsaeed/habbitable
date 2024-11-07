@@ -14,4 +14,14 @@ class AuthRepository {
   Future<Response> login(LoginModel loginModel) async {
     return await httpWrapper.post('${base}login', data: loginModel.toJson());
   }
+
+  Future<Response> logout() async {
+    return await httpWrapper.post('${base}logout');
+  }
+
+  Future<Response> refreshToken(String refreshToken) async {
+    return await httpWrapper.post('${base}refresh', data: {
+      'refresh_token': refreshToken,
+    });
+  }
 }

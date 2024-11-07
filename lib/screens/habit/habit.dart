@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:habbitable/controllers/home_controller.dart';
 import 'package:habbitable/models/habit.dart';
 import 'package:habbitable/models/habit_logs.dart';
 import 'package:habbitable/screens/habit/controllers/controller.dart';
+import 'package:habbitable/screens/habit/widgets/deletehabit.dart';
 import 'package:habbitable/utils/functions.dart';
 import 'package:habbitable/widgets/history.dart';
+import 'package:slider_button/slider_button.dart';
 
 class HabitScreen extends GetView<HabitScreenController> {
   final Habit habit;
-  const HabitScreen({super.key, required this.habit});
+  HabitScreen({super.key, required this.habit});
+  final HomeController homeController = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,6 +23,23 @@ class HabitScreen extends GetView<HabitScreenController> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.toNamed('/habit/users', arguments: {'habit': habit});
+            },
+            icon: Icon(
+              Icons.group_outlined,
+              weight: 200,
+              color: Get.theme.colorScheme.primary,
+            ),
+          ),
+          DeleteHabit(
+            habit: habit,
+            homeController: homeController,
+            controller: controller,
+          ),
+        ],
         centerTitle: false,
       ),
       body: Container(
@@ -39,48 +60,23 @@ class HabitScreen extends GetView<HabitScreenController> {
             ),
             const SizedBox(height: 10),
             if (!habit.isCompleted())
-              InkWell(
-                borderRadius: BorderRadius.circular(6),
-                onTap: () {},
-                onLongPress: () {
-                  // Assuming there's a function to complete the habit
-                  // This is a placeholder for the actual function call
-                  // completeHabit(habit.id);
+              SliderButton(
+                action: () async {
+                  return true;
                 },
-                splashColor: Get.theme.colorScheme.primary,
-                splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
-                child: Container(
-                  width: Get.width,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                      color: Get.theme.colorScheme.primary,
-                    ),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Complete",
-                    style: Get.theme.textTheme.bodyMedium!.copyWith(
-                      color: Get.theme.colorScheme.onSurface,
-                    ),
-                  ),
-                ),
-              ),
-            if (habit.isCompleted())
-              Container(
                 width: Get.width,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: Get.theme.colorScheme.primary,
+                shimmer: true,
+                disable: habit.isCompleted(),
+                label: Text(
+                  habit.isCompleted() ? "Completed" : "Mark as completed",
+                  style: Get.theme.textTheme.bodyMedium,
                 ),
-                alignment: Alignment.center,
-                child: Text(
-                  "Completed Today",
-                  style: Get.theme.textTheme.bodyMedium!.copyWith(
-                    color: Get.theme.colorScheme.onPrimary,
-                  ),
+                buttonColor: habit.color,
+                buttonSize: 50,
+                buttonWidth: 150,
+                icon: Icon(
+                  Icons.check_circle_outline_rounded,
+                  color: Colors.white,
                 ),
               ),
             const SizedBox(height: 20),
@@ -90,20 +86,20 @@ class HabitScreen extends GetView<HabitScreenController> {
               children: [
                 Expanded(
                   child: Container(
-                    height: 100,
+                    height: 60,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
-                      color: habit.color.withOpacity(0.6),
+                      border: Border.all(
+                        color: habit.color,
+                      ),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "Time",
-                          style: Get.theme.textTheme.bodySmall!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Icon(
+                          Icons.timer_outlined,
+                          color: habit.color,
                         ),
                         const SizedBox(height: 5),
                         Text(
@@ -117,20 +113,20 @@ class HabitScreen extends GetView<HabitScreenController> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Container(
-                    height: 100,
+                    height: 60,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
-                      color: habit.color.withOpacity(0.6),
+                      border: Border.all(
+                        color: habit.color,
+                      ),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "Frequency",
-                          style: Get.theme.textTheme.bodySmall!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Icon(
+                          Icons.repeat_outlined,
+                          color: habit.color,
                         ),
                         const SizedBox(height: 5),
                         Text(
@@ -144,24 +140,24 @@ class HabitScreen extends GetView<HabitScreenController> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Container(
-                    height: 100,
+                    height: 60,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
-                      color: habit.color.withOpacity(0.6),
+                      border: Border.all(
+                        color: habit.color,
+                      ),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          "Goal",
-                          style: Get.theme.textTheme.bodySmall!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Icon(
+                          Icons.flag_outlined,
+                          color: habit.color,
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          "${habit.goal.toString()} days",
+                          habit.goal == 0 ? "No Goal" : "${habit.goal} times",
                           style: Get.theme.textTheme.bodySmall,
                         ),
                       ],

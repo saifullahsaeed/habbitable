@@ -29,7 +29,7 @@ class HabitsService extends GetxController {
   }
 
   Future<void> testInsert() async {
-    final int userId = (await authService.currentUser()).id;
+    final int userId = (authService.currentUser).id;
     final HabitLog habitLog = HabitLog(id: 1, habitId: 1, action: 'complete');
     await sqliteService.insertHabitLog(habitLog, userId);
     // print(habits);
@@ -42,6 +42,9 @@ class HabitsService extends GetxController {
 
   Future<void> createHabit(Habit habit) async {
     try {
+      if (habit.customDays.isEmpty) {
+        habit.customDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+      }
       await habitsRepository.createHabit(habit);
       showSnackBar(
         title: 'Success',
@@ -68,25 +71,31 @@ class HabitsService extends GetxController {
   }
 
   Future<void> deleteHabit(String id) async {
-    //read json file
-    final json = await rootBundle.loadString(_habitsFilePath);
-    final List<dynamic> habits = jsonDecode(json);
-    habits.removeWhere((h) => h['id'] == id);
-    await _saveHabits(habits);
+    try {
+      await habitsRepository.deleteHabit(int.parse(id));
+      showSnackBar(
+        title: 'Success',
+        message: 'Habit deleted successfully',
+        type: 'success',
+      );
+    } catch (e) {
+      showSnackBar(
+        title: 'Error',
+        message: e.toString(),
+        type: 'error',
+      );
+    }
   }
 
   Future<void> completeHabit(String id) async {
-    final int userId = (await authService.currentUser()).id;
     final HabitLog habitLog =
-        HabitLog(habitId: int.parse(id), action: 'complete');
-    await sqliteService.insertHabitLog(habitLog, userId);
+        HabitLog(habitId: int.parse(id), action: 'completed');
+    await habitsRepository.completeHabit(habitLog);
   }
 
   Future<void> undoHabit(String id) async {
-    final int userId = (await authService.currentUser()).id;
-    final HabitLog habitLog =
-        HabitLog(habitId: int.parse(id), action: 'reverse');
-    await sqliteService.insertHabitLog(habitLog, userId);
+    final HabitLog habitLog = HabitLog(habitId: int.parse(id), action: 'undo');
+    await habitsRepository.completeHabit(habitLog);
   }
 
   Future<List<HabitLog>> getHabitLogsRange(
