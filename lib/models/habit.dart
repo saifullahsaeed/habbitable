@@ -64,7 +64,7 @@ class Habit {
       color: json['color'] != null
           ? Color(int.parse(json['color'], radix: 16))
           : Colors.blue,
-      streak: json['streak'],
+      streak: json['streak'] ?? 0,
       goal: json['goal'] ?? 0,
       time: json['time'] ?? 10,
       frequency: json['frequency'],

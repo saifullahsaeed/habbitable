@@ -4,6 +4,8 @@ class User {
   final String email;
   final int? age;
   final String? gender;
+  final bool? friend;
+  final bool? sentRequest;
 
   User({
     required this.id,
@@ -11,6 +13,8 @@ class User {
     required this.email,
     this.age,
     this.gender,
+    this.friend = false,
+    this.sentRequest = false,
   });
 
   // Convert a User into a JSON object.
@@ -39,6 +43,8 @@ class User {
       email: json['email'],
       age: json['age'],
       gender: json['gender'],
+      friend: json['friend'] ?? false,
+      sentRequest: json['sentRequest'] ?? false,
     );
   }
 }

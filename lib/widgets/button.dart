@@ -7,6 +7,7 @@ class MainButton extends StatefulWidget {
   final VoidCallback onPressed;
   final String style;
   final bool isLoading;
+  final bool disabled;
   // ignore: prefer_typing_uninitialized_variables
   final iconSide;
   const MainButton({
@@ -17,6 +18,7 @@ class MainButton extends StatefulWidget {
     this.style = 'primary',
     this.iconSide = 'start',
     this.isLoading = false,
+    this.disabled = false,
   });
 
   @override
@@ -32,15 +34,21 @@ class _MainButtonState extends State<MainButton> {
       iconAlignment:
           widget.iconSide == 'start' ? IconAlignment.start : IconAlignment.end,
       style: ElevatedButton.styleFrom(
-        backgroundColor: widget.style == 'primary'
-            ? Get.theme.colorScheme.primary
-            : Get.theme.colorScheme.secondary,
+        backgroundColor: widget.disabled
+            ? Get.theme.colorScheme.primary.withOpacity(0.5)
+            : widget.style == 'primary'
+                ? Get.theme.colorScheme.primary
+                : Get.theme.colorScheme.secondary,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(6)),
         ),
         disabledBackgroundColor: Get.theme.colorScheme.primary.withOpacity(0.5),
       ),
-      onPressed: widget.isLoading ? () {} : widget.onPressed,
+      onPressed: widget.disabled
+          ? () {}
+          : widget.isLoading
+              ? () {}
+              : widget.onPressed,
     );
   }
 }

@@ -2,7 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MainAppBar({super.key});
+  final String? title;
+  final List<Widget>? actions;
+  final bool? showBackButton;
+  final bool? showNotifications;
+  const MainAppBar({
+    super.key,
+    this.title,
+    this.actions,
+    this.showBackButton,
+    this.showNotifications = true,
+  });
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -13,17 +23,19 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Get.theme.colorScheme.primary,
-        title: const Text(
-          "Habbitable",
+        title: Text(
+          title ?? "Habbitable",
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_none),
-          ),
+          if (showNotifications ?? false)
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.notifications_none),
+            ),
+          ...actions ?? [],
         ],
       );
 }

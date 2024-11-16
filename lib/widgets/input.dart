@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
+import 'package:habbitable/models/user.dart';
+import 'package:habbitable/screens/community/widgets/search_user_tile.dart';
 import 'package:habbitable/utils/consts.dart';
+import 'package:habbitable/widgets/intials_image_placeholder.dart';
 
 TextFormField buildInput({
   required String label,
@@ -206,5 +210,98 @@ showTimePickerField(
         style: Get.theme.textTheme.bodySmall,
       ),
     ),
+  );
+}
+
+showUserSearchField(
+  BuildContext context,
+  String hint,
+  String helper,
+  Future<List<User>> Function(String) suggestionsCallback,
+  ValueSetter<User> onChanged,
+  Future<int> Function(User) onRequest,
+) {
+  return TypeAheadField<User>(
+    suggestionsCallback: (search) {
+      if (search.isEmpty) {
+        return [];
+      }
+      if (search.length < 3) {
+        return [];
+      }
+      return suggestionsCallback(search);
+    },
+    itemBuilder: (context, User user) {
+      return SearchUserTile(user: user, onRequest: onRequest);
+    },
+    onSelected: onChanged,
+    hideKeyboardOnDrag: true,
+    hideOnEmpty: true,
+    debounceDuration: const Duration(milliseconds: 300),
+    itemSeparatorBuilder: (context, index) {
+      return const SizedBox(height: 10);
+    },
+    builder: (context, controller, focusNode) {
+      return TextField(
+        controller: controller,
+        focusNode: focusNode,
+        autofocus: true,
+        autocorrect: false,
+        onTapOutside: (focus) {
+          FocusScope.of(context).unfocus();
+        },
+        decoration: InputDecoration(
+          labelText: hint,
+          hintText: hint,
+          helperText: helper,
+          helperMaxLines: 2,
+          hintMaxLines: 1,
+          helperStyle: const TextStyle(
+            fontSize: 10,
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 0,
+            horizontal: 10,
+          ),
+          fillColor: Get.theme.cardColor,
+          filled: true,
+          labelStyle: TextStyle(
+            color: Get.theme.textTheme.bodyMedium!.color,
+            fontWeight: FontWeight.w400,
+            fontSize: 13,
+          ),
+          hintStyle: TextStyle(
+            color: Get.theme.textTheme.bodyMedium!.color!.withOpacity(0.5),
+            fontWeight: FontWeight.w400,
+            fontSize: 13,
+          ),
+          focusColor: Get.theme.colorScheme.onSurface.withOpacity(0.5),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
+        ),
+      );
+    },
   );
 }

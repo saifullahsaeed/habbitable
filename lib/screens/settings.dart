@@ -6,6 +6,7 @@ import 'package:habbitable/models/user.dart';
 import 'package:habbitable/widgets/intials_image_placeholder.dart';
 import 'package:habbitable/widgets/mainappbar.dart';
 import 'package:habbitable/widgets/setting_tile.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -16,7 +17,9 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     User user = _authenticationService.currentUser;
     return Scaffold(
-      appBar: const MainAppBar(),
+      appBar: const MainAppBar(
+        title: 'Settings',
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
@@ -33,7 +36,7 @@ class SettingsScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Get.toNamed('/profile/${user.id}',
-                          arguments: {'user': user});
+                          arguments: {'userId': user.id});
                     },
                     child: Row(
                       children: [
@@ -54,7 +57,7 @@ class SettingsScreen extends StatelessWidget {
                             Text(
                               user.email,
                               style: Get.textTheme.bodySmall?.copyWith(
-                                color: Get.theme.hintColor,
+                                color: Get.theme.colorScheme.outlineVariant,
                               ),
                             ),
                           ],
@@ -99,9 +102,11 @@ class SettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             SettingTile(
-              icon: Icons.language_outlined,
-              title: 'Language',
-              onTap: () {},
+              icon: LineIcons.userPlus,
+              title: 'Social',
+              onTap: () {
+                Get.toNamed('/settings/social');
+              },
             ),
             const SizedBox(height: 10),
             SettingTile(

@@ -112,9 +112,11 @@ class _HabbitCardState extends State<HabbitCard> {
                     ),
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     onChanged: (bool? value) {
-                      setState(() {
-                        isCompleted = value!;
-                      });
+                      if (!widget.disabled) {
+                        setState(() {
+                          isCompleted = value!;
+                        });
+                      }
                     },
                   ),
                   Expanded(

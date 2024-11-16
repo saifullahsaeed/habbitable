@@ -8,10 +8,17 @@ import 'package:habbitable/screens/auth/login.dart';
 import 'package:habbitable/screens/auth/reset_password.dart';
 import 'package:habbitable/screens/auth/signup.dart';
 import 'package:habbitable/screens/bottom_nav.dart';
+import 'package:habbitable/screens/community/controllers/search_controller.dart';
+import 'package:habbitable/screens/community/my_friends.dart';
+import 'package:habbitable/screens/community/received_requests.dart';
+import 'package:habbitable/screens/community/search_user.dart';
+import 'package:habbitable/screens/community/sent_requests.dart';
+import 'package:habbitable/screens/community/social_settings.dart';
 import 'package:habbitable/screens/habit/controllers/controller.dart';
 import 'package:habbitable/screens/habit/create.dart';
 import 'package:habbitable/screens/habit/habit.dart';
 import 'package:habbitable/screens/habit/users.dart';
+import 'package:habbitable/screens/profile/controllers/profilecontroller.dart';
 import 'package:habbitable/screens/profile/edit.dart';
 import 'package:habbitable/screens/profile/profile.dart';
 import 'package:habbitable/screens/settings.dart';
@@ -34,6 +41,12 @@ final List<GetPage<dynamic>> routes = [
     page: () => SettingsScreen(),
     middlewares: [
       AuthMiddleware(),
+    ],
+    children: [
+      GetPage(
+        name: '/social',
+        page: () => SocialSettingsScreen(),
+      ),
     ],
   ),
   GetPage(
@@ -117,9 +130,34 @@ final List<GetPage<dynamic>> routes = [
   ),
   GetPage(
     name: '/profile/:userId',
-    page: () => ProfileScreen(
-      userId: int.parse(Get.parameters['userId']!),
-      user: Get.arguments['user'],
-    ),
+    page: () => ProfileScreen(),
+    bindings: [
+      BindingsBuilder(() {
+        Get.lazyPut(() =>
+            ProfileController(userId: int.parse(Get.parameters['userId']!)));
+      }),
+    ],
+  ),
+  GetPage(
+    name: '/searchuser',
+    page: () => const SearchUserScreen(),
+    showCupertinoParallax: false,
+    bindings: [
+      BindingsBuilder(() {
+        Get.lazyPut(() => SearchUserController());
+      }),
+    ],
+  ),
+  GetPage(
+    name: '/sentrequests',
+    page: () => const SentRequestsScreen(),
+  ),
+  GetPage(
+    name: '/receivedrequests',
+    page: () => const ReceivedRequestsScreen(),
+  ),
+  GetPage(
+    name: '/myfriends',
+    page: () => const MyFriendsScreen(),
   ),
 ];
