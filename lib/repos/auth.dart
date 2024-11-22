@@ -20,8 +20,12 @@ class AuthRepository {
   }
 
   Future<Response> refreshToken(String refreshToken) async {
-    return await httpWrapper.post('${base}refresh', data: {
-      'refresh_token': refreshToken,
-    });
+    return await httpWrapper.post('${base}refresh',
+        auth: false, data: {'refresh_token': refreshToken});
+  }
+
+  Future<Response> verifyToken(String token) async {
+    return await httpWrapper
+        .post('${base}verify-token', data: {'token': token});
   }
 }

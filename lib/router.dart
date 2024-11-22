@@ -14,6 +14,7 @@ import 'package:habbitable/screens/community/received_requests.dart';
 import 'package:habbitable/screens/community/search_user.dart';
 import 'package:habbitable/screens/community/sent_requests.dart';
 import 'package:habbitable/screens/community/social_settings.dart';
+import 'package:habbitable/screens/habit/calender.dart';
 import 'package:habbitable/screens/habit/controllers/controller.dart';
 import 'package:habbitable/screens/habit/create.dart';
 import 'package:habbitable/screens/habit/habit.dart';
@@ -159,5 +160,9 @@ final List<GetPage<dynamic>> routes = [
   GetPage(
     name: '/myfriends',
     page: () => const MyFriendsScreen(),
+  ),
+  GetPage(
+    name: '/calender',
+    page: () => const HabitCalenderScreen(),
   ),
 ];

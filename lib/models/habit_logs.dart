@@ -1,4 +1,3 @@
-import 'package:habbitable/models/habit.dart';
 import 'package:habbitable/models/user.dart';
 
 class HabitLog {

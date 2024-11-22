@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:habbitable/screens/comunity.dart';
-import 'package:habbitable/screens/progress.dart';
+import 'package:habbitable/screens/progress/progress.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:habbitable/screens/home.dart';
 import 'package:habbitable/screens/settings.dart';
@@ -13,7 +13,7 @@ class BottomNav extends StatelessWidget {
     return [
       HomeScreen(),
       const ComunityScreen(),
-      const ProgressScreen(),
+      ProgressScreen(),
       SettingsScreen(),
     ];
   }
@@ -49,7 +49,7 @@ class BottomNav extends StatelessWidget {
       context,
       screens: _buildScreens(),
       items: _navBarsItems(),
-      navBarStyle: NavBarStyle.style5,
+      navBarStyle: NavBarStyle.style9,
       backgroundColor: Get.theme.colorScheme.surface,
       onWillPop: (value) async {
         return false;

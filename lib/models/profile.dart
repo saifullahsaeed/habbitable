@@ -42,7 +42,7 @@ class Profile {
             : [],
         totalFriendsCount: json['totalFriendsCount'] ?? 0,
         totalHabitsCount: json['totalHabitsCount'] ?? 0,
-        isFriend: json['isFriend'] ?? false,
+        isFriend: json['friend'] ?? false,
         requestSent: json['requestSent'] ?? false,
         requestReceived: json['requestReceived'] ?? false,
       );

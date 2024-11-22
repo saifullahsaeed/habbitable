@@ -87,11 +87,23 @@ class _MyFriendsScreenState extends State<MyFriendsScreen> {
                               Expanded(
                                 child: Row(
                                   children: [
-                                    InitialsImagePlaceholder(
-                                      name: Friend.otherUser(
-                                              friends[index], me.id)
-                                          .name,
-                                      radius: 20,
+                                    InkWell(
+                                      onTap: () {
+                                        Get.toNamed(
+                                          '/profile/${Friend.otherUser(friends[index], me.id).id}',
+                                          arguments: {
+                                            'userId': Friend.otherUser(
+                                                    friends[index], me.id)
+                                                .id
+                                          },
+                                        );
+                                      },
+                                      child: InitialsImagePlaceholder(
+                                        name: Friend.otherUser(
+                                                friends[index], me.id)
+                                            .name,
+                                        radius: 20,
+                                      ),
                                     ),
                                     const SizedBox(width: 10),
                                     Expanded(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:habbitable/models/habit.dart';
 import 'package:habbitable/widgets/habitcard.dart';
+import 'package:line_icons/line_icons.dart';
 
 class ProfileTabs extends StatefulWidget {
   final List<Habit> habits;
@@ -32,31 +34,74 @@ class _ProfileTabsState extends State<ProfileTabs>
       children: [
         TabBar(
           controller: tabController,
+          dividerHeight: 0,
+          tabAlignment: TabAlignment.fill,
+          indicator: BoxDecoration(
+            border: Border.all(
+              color: Get.theme.colorScheme.primary.withOpacity(0.5),
+            ),
+            borderRadius: BorderRadius.circular(10),
+            color: Get.theme.colorScheme.primary.withOpacity(0.1),
+          ),
           tabs: const [
-            Tab(text: 'Habits'),
-            Tab(text: 'Goals'),
+            Tab(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(LineIcons.alternateFire),
+                  SizedBox(width: 5),
+                  Text('Habits'),
+                ],
+              ),
+            ),
+            Tab(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(LineIcons.medal),
+                  SizedBox(width: 5),
+                  Text('Achievements'),
+                ],
+              ),
+            ),
           ],
         ),
         Expanded(
           child: TabBarView(
             controller: tabController,
             children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                child: ListView.builder(
-                  itemCount: widget.habits.length,
-                  itemBuilder: (context, index) => HabbitCard(
-                    habit: widget.habits[index],
-                    disabled: true,
-                    onCompleted: (completed) {},
+              if (widget.habits.isEmpty)
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(LineIcons.alternateFire, size: 50),
+                        Text('No habits available for this user'),
+                      ],
+                    ),
+                  ),
+                )
+              else
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: ListView.builder(
+                    itemCount: widget.habits.length,
+                    itemBuilder: (context, index) => HabbitCard(
+                      habit: widget.habits[index],
+                      disabled: true,
+                      onCompleted: (completed) {},
+                    ),
                   ),
                 ),
-              ),
-              SingleChildScrollView(
-                physics: const NeverScrollableScrollPhysics(),
+              Container(
+                padding: const EdgeInsets.all(10),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    for (int i = 0; i < 100; i++) Text('Goal $i'),
+                    Icon(LineIcons.medal, size: 50),
+                    Text('No achievements yet'),
                   ],
                 ),
               ),

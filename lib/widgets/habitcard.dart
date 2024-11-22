@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:habbitable/models/habit.dart';
 import 'package:habbitable/utils/functions.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HabbitCard extends StatefulWidget {
   final Habit habit;
@@ -191,6 +192,131 @@ class _HabbitCardState extends State<HabbitCard> {
                     ],
                   ),
                 ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class HabitCardShimmer extends StatelessWidget {
+  const HabitCardShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Container(
+        width: Get.width,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Get.theme.cardColor,
+        ),
+        child: Shimmer.fromColors(
+          baseColor: Get.theme.colorScheme.onSurface.withOpacity(0.3),
+          highlightColor: Get.theme.colorScheme.onSurface.withOpacity(0.1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 120,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Get.theme.colorScheme.onSurface.withOpacity(0.3),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color:
+                              Get.theme.colorScheme.onSurface.withOpacity(0.3),
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Container(
+                        width: 40,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color:
+                              Get.theme.colorScheme.onSurface.withOpacity(0.3),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      color: Get.theme.colorScheme.onSurface.withOpacity(0.3),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Get.theme.colorScheme.onSurface
+                                .withOpacity(0.3),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Container(
+                          width: 150,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Get.theme.colorScheme.onSurface
+                                .withOpacity(0.3),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Container(
+                    width: 15,
+                    height: 15,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(7.5),
+                      color: Get.theme.colorScheme.onSurface.withOpacity(0.3),
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  Container(
+                    width: 80,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Get.theme.colorScheme.onSurface.withOpacity(0.3),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

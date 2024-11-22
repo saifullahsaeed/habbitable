@@ -18,6 +18,7 @@ class Habit {
   User owner;
   List<User> users;
   List<String> customDays;
+  final bool isPublic;
   final TimeOfDay reminderTime;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -39,6 +40,7 @@ class Habit {
     required this.owner,
     required this.users,
     required this.customDays,
+    required this.isPublic,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -80,6 +82,7 @@ class Habit {
       customDays: json['customDays'] != null
           ? (json['customDays'] as String).split(',')
           : [],
+      isPublic: json['isPublic'] ?? false,
       createdAt: DateTime.parse(json['createdAt']).toLocal(),
       updatedAt: DateTime.parse(json['updatedAt']).toLocal(),
     );
@@ -97,6 +100,7 @@ class Habit {
       'color': color.value.toRadixString(16),
       'startDate': createdAt.toIso8601String(),
       'customDays': customDays.join(','),
+      'isPublic': isPublic,
     };
   }
 
@@ -134,6 +138,7 @@ class Habit {
       customDays: updates['customDays'] != null
           ? (updates['customDays'])
           : habit.customDays,
+      isPublic: updates['isPublic'] ?? habit.isPublic,
       createdAt: updates['createdAt'] != null
           ? DateTime.parse(updates['createdAt'])
           : habit.createdAt,

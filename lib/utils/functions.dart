@@ -124,3 +124,44 @@ String timeAgo(DateTime date) {
     return '$years ${years == 1 ? 'year' : 'years'} ago';
   }
 }
+
+String formatedDateForCalender(DateTime date) {
+  //show today tommorow and yesterday
+  if (isSameDay(date, DateTime.now())) {
+    return "Today";
+  } else if (isSameDay(date, DateTime.now().add(Duration(days: 1)))) {
+    return "Tomorrow";
+  } else if (isSameDay(date, DateTime.now().subtract(Duration(days: 1)))) {
+    return "Yesterday";
+  }
+  return '${date.day.toString().padLeft(2, '0')} ${shortMonthFromNumber(date.month)} ${date.year}';
+}
+
+String shortMonthFromNumber(int month) {
+  return monthFromNumber(month).substring(0, 3);
+}
+
+//isSameDayas
+bool isSameDayAs(DateTime date1, DateTime date2) {
+  return date1.year == date2.year &&
+      date1.month == date2.month &&
+      date1.day == date2.day;
+}
+
+DateTime startOfWeek({DateTime? date}) {
+  date ??= DateTime.now();
+  // Adjust for Sunday (7) to be treated as 0
+  final adjustedWeekday = date.weekday == 7 ? 0 : date.weekday;
+  return DateTime(date.year, date.month, date.day - adjustedWeekday);
+}
+
+DateTime endOfWeek({DateTime? date}) {
+  date ??= DateTime.now();
+  // Adjust for Sunday (7) to be treated as 0
+  final adjustedWeekday = date.weekday == 7 ? 0 : date.weekday;
+  return DateTime(date.year, date.month, date.day + (6 - adjustedWeekday));
+}
+
+String minutesToHours(int minutes) {
+  return '${(minutes / 60).floor()}h ${minutes % 60}m';
+}

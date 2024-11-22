@@ -7,6 +7,7 @@ import 'package:habbitable/screens/habit/controllers/controller.dart';
 import 'package:habbitable/screens/habit/widgets/deletehabit.dart';
 import 'package:habbitable/utils/functions.dart';
 import 'package:habbitable/widgets/history.dart';
+import 'package:habbitable/widgets/intials_image_placeholder.dart';
 import 'package:slider_button/slider_button.dart';
 
 class HabitScreen extends GetView<HabitScreenController> {
@@ -218,50 +219,51 @@ class HabitScreen extends GetView<HabitScreenController> {
                         // physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 5,
-                              vertical: 5,
-                            ),
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                              color: Get.theme.cardColor,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  timeFromDate(
-                                      controller.selectedDayLogs[index].date!),
-                                  style: Get.theme.textTheme.bodySmall,
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: Get.width,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 5,
+                                  vertical: 5,
                                 ),
-                                const SizedBox(height: 5),
-                                Row(
+                                margin: const EdgeInsets.symmetric(vertical: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  color: Get.theme.cardColor,
+                                ),
+                                child: Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
                                   children: [
-                                    if (controller.selectedDayLogs[index].action
-                                            .toLowerCase() ==
-                                        "complete")
-                                      const Icon(
-                                        Icons.check_circle_outline_rounded,
-                                        color: Colors.green,
-                                      ),
-                                    if (controller.selectedDayLogs[index].action
-                                            .toLowerCase() ==
-                                        "reversed")
-                                      const Icon(
-                                        Icons.cancel_outlined,
-                                        color: Colors.red,
-                                      ),
+                                    InitialsImagePlaceholder(
+                                      name: controller.selectedDayLogs[index]
+                                              .user?.name ??
+                                          "",
+                                    ),
                                     const SizedBox(width: 5),
                                     Text(
-                                      "Marked as ${controller.selectedDayLogs[index].action.toLowerCase()}",
-                                      style: Get.theme.textTheme.bodySmall,
+                                      controller.selectedDayLogs[index].user
+                                              ?.name ??
+                                          "Invalid Name",
+                                      style: Get.theme.textTheme.bodyMedium!
+                                          .copyWith(
+                                        color: Get.theme.colorScheme.onSurface,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      ": Marked habit as ${controller.selectedDayLogs[index].action.toLowerCase()}",
+                                      style: Get.theme.textTheme.bodySmall!
+                                          .copyWith(
+                                        color: Get.theme.colorScheme.onSurface,
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           );
                         },
                       ),

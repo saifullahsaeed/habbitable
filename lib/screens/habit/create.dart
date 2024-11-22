@@ -31,6 +31,7 @@ class _CreateHabitScreenState extends State<CreateHabitScreen> {
   String _rate = 'daily';
   IconData _selectedIcon = Icons.star_border_outlined;
   bool _setGoal = false;
+  bool _isPublic = false;
   final List<String> _customDays = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -57,6 +58,7 @@ class _CreateHabitScreenState extends State<CreateHabitScreen> {
           DateTime.now().add(Duration(days: 1)).copyWith(hour: 10, minute: 0),
       reminderTime: TimeOfDay(hour: 10, minute: 0),
       customDays: _customDays,
+      isPublic: _isPublic,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
@@ -194,6 +196,30 @@ class _CreateHabitScreenState extends State<CreateHabitScreen> {
                     controller: _goalController,
                   ),
                 const SizedBox(height: 10),
+                Row(
+                  children: <Widget>[
+                    Checkbox(
+                      value: _isPublic,
+                      activeColor: Get.theme.colorScheme.primary,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isPublic = value!;
+                          _updateHabit({'isPublic': value});
+                        });
+                      },
+                    ),
+                    Text('Public'),
+                  ],
+                ),
+                Text(
+                  'NOTE: Public habits are visible to all users on your profile and can be joined by anyone from the community.',
+                  style: Get.theme.textTheme.bodySmall!.copyWith(
+                    color: Get.theme.colorScheme.onSurface,
+                    fontWeight: FontWeight.w200,
+                    fontSize: 10,
+                  ),
+                ),
+                const SizedBox(height: 10),
                 SizedBox(
                   width: Get.width,
                   child: MainButton(
@@ -208,7 +234,7 @@ class _CreateHabitScreenState extends State<CreateHabitScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 50),
               ],
             ),
           ),

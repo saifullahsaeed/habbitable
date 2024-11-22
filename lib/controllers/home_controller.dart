@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:habbitable/Services/habits.dart';
 import 'package:habbitable/models/habit.dart';
+import 'package:habbitable/models/time_spent.dart';
+import 'package:habbitable/utils/functions.dart';
 
 class HomeController extends GetxController {
   final HabitsService habitsService = Get.find<HabitsService>();
@@ -18,19 +20,10 @@ class HomeController extends GetxController {
     _habits.removeWhere((h) => h.id == habitId);
   }
 
-  List<Habit> get habitsTodaysUpcoming {
-    final today = DateTime.now();
-
-    final lateHabits = _habits
-        .where((h) => h.nextDue.isBefore(today.add(const Duration(hours: 1))))
-        .toList();
-    final upcomingHabits =
-        _habits.where((h) => h.nextDue.isAfter(today)).toList();
-    return [...lateHabits, ...upcomingHabits];
-  }
+  List<Habit> get habitsTodaysUpcoming => _habits;
 
   Future<void> getHabits() async {
-    _habits.value = await habitsService.getHabits();
+    _habits.value = await habitsService.getHabitsByDate(DateTime.now());
   }
 
   Future<void> createHabit(Habit habit) async {
@@ -61,5 +54,19 @@ class HomeController extends GetxController {
       habit.streak = habit.streak - 1;
     }
     await habitsService.undoHabit(id);
+  }
+
+  Future<List<int>> getTimeSpent(
+      {DateTime? startDate, DateTime? endDate}) async {
+    startDate ??= startOfWeek();
+    endDate ??= endOfWeek();
+    final data = await habitsService.getTimeSpent(startDate, endDate);
+    List<int> result = List<int>.filled(7, 0);
+    for (var t in data) {
+      int dayOfWeek = t.date.weekday;
+      dayOfWeek = dayOfWeek == 7 ? 0 : dayOfWeek;
+      result[dayOfWeek] = t.totalTime;
+    }
+    return result;
   }
 }

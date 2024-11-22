@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:habbitable/models/habit_logs.dart';
@@ -25,7 +27,59 @@ class _HistoryWidgetState extends State<HistoryWidget> {
       List.generate(12, (index) => (index + 1).toString());
   String selectedMonth = DateTime.now().month.toString();
   String selectedYear = DateTime.now().year.toString();
-  int selectedDay = DateTime.now().day;
+  DateTime selectedDate = DateTime.now();
+
+  void _handleMonthChange(int change) {
+    setState(() {
+      DateTime currentDate =
+          DateTime(int.parse(selectedYear), int.parse(selectedMonth), 1);
+
+      DateTime newDate =
+          DateTime(currentDate.year, currentDate.month + change, 1);
+
+      selectedMonth = newDate.month.toString();
+      selectedYear = newDate.year.toString();
+
+      int daysInNewMonth = DateTime(newDate.year, newDate.month + 1, 0).day;
+      int targetDay = min(selectedDate.day, daysInNewMonth);
+      selectedDate = DateTime(newDate.year, newDate.month, targetDay);
+    });
+
+    widget.selectedMonthChanged(
+      DateTime(int.parse(selectedYear), int.parse(selectedMonth), 1),
+    );
+  }
+
+  Color _getTileColor(List<HabitLog> dayLogs) {
+    if (dayLogs.isEmpty) return Colors.grey.shade400;
+
+    int completeCount =
+        dayLogs.where((log) => log.action == 'completed').length;
+    int reverseCount = dayLogs.where((log) => log.action == 'reverse').length;
+
+    if (reverseCount > 0) return Colors.red;
+    if (completeCount > 0) {
+      return widget.baseColor.withAlpha(completeCount > 1 ? 255 : 200);
+    }
+    return Colors.grey.shade400;
+  }
+
+  String _getTooltipText(List<HabitLog> dayLogs) {
+    if (dayLogs.isEmpty) return '';
+
+    int completeCount =
+        dayLogs.where((log) => log.action == 'completed').length;
+    int reverseCount = dayLogs.where((log) => log.action == 'reverse').length;
+
+    if (reverseCount > 0) return 'Reversed a habit';
+    if (completeCount > 0) {
+      return completeCount > 1
+          ? "$completeCount habits completed"
+          : "1 habit completed";
+    }
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -44,151 +98,117 @@ class _HistoryWidgetState extends State<HistoryWidget> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                onPressed: () {
-                  if (selectedMonth == '1') {
-                    setState(() {
-                      selectedMonth = '12';
-                    });
-                  } else {
-                    setState(() {
-                      selectedMonth = (int.parse(selectedMonth) - 1).toString();
-                    });
-                  }
-                  widget.selectedMonthChanged(DateTime(
-                      int.parse(selectedYear), int.parse(selectedMonth), 1));
-                },
-                splashRadius: 20,
-                visualDensity: VisualDensity.comfortable,
-                padding: EdgeInsets.zero,
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  size: 16,
-                ),
-              ),
-              Text(
-                '${monthFromNumber(int.parse(selectedMonth))} $selectedYear',
-                style: Get.theme.textTheme.bodySmall!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  if (selectedMonth == '12') {
-                    setState(() {
-                      selectedMonth = '1';
-                    });
-                  } else {
-                    setState(() {
-                      selectedMonth = (int.parse(selectedMonth) + 1).toString();
-                    });
-                  }
-                  widget.selectedMonthChanged(DateTime(
-                      int.parse(selectedYear), int.parse(selectedMonth), 1));
-                },
-                splashRadius: 20,
-                visualDensity: VisualDensity.comfortable,
-                padding: EdgeInsets.zero,
-                icon: const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 16,
-                ),
-              ),
-            ],
-          ),
+          _buildMonthSelector(),
           const SizedBox(height: 10),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.zero,
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 20,
-              mainAxisSpacing: 4,
-              crossAxisSpacing: 4,
-              childAspectRatio: 1,
+          _buildCalendarGrid(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMonthSelector() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          onPressed: () => _handleMonthChange(-1),
+          splashRadius: 20,
+          visualDensity: VisualDensity.comfortable,
+          padding: EdgeInsets.zero,
+          icon: const Icon(Icons.arrow_back_ios, size: 16),
+        ),
+        Text(
+          '${monthFromNumber(int.parse(selectedMonth))} $selectedYear',
+          style: Get.theme.textTheme.bodySmall!.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        IconButton(
+          onPressed: () => _handleMonthChange(1),
+          splashRadius: 20,
+          visualDensity: VisualDensity.comfortable,
+          padding: EdgeInsets.zero,
+          icon: const Icon(Icons.arrow_forward_ios, size: 16),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCalendarGrid() {
+    int daysInMonth =
+        DateTime(int.parse(selectedYear), int.parse(selectedMonth) + 1, 0).day;
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 20,
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        childAspectRatio: 1,
+      ),
+      itemCount: daysInMonth,
+      itemBuilder: (context, index) {
+        final date = DateTime(
+          int.parse(selectedYear),
+          int.parse(selectedMonth),
+          index + 1,
+        );
+        List<HabitLog> dayLogs = widget.habitLogs
+            .where((log) => isSameDay(log.date!, date))
+            .toList();
+
+        Color tileColor = _getTileColor(dayLogs);
+        String tooltipText = _getTooltipText(dayLogs);
+
+        return _buildCalendarTile(date, dayLogs, tileColor, tooltipText, index);
+      },
+    );
+  }
+
+  Widget _buildCalendarTile(DateTime date, List<HabitLog> dayLogs,
+      Color tileColor, String tooltipText, int index) {
+    bool isSelected = isSameDay(date, selectedDate);
+
+    return Tooltip(
+      decoration: BoxDecoration(
+        color: tileColor,
+        borderRadius: BorderRadius.circular(2),
+      ),
+      preferBelow: false,
+      triggerMode: TooltipTriggerMode.longPress,
+      richMessage: TextSpan(
+        children: [
+          TextSpan(
+            text: formatDate(date),
+            style: Get.theme.textTheme.bodySmall!.copyWith(
+              fontWeight: FontWeight.bold,
             ),
-            itemCount: 31,
-            itemBuilder: (context, index) {
-              final date = DateTime(
-                  int.parse(selectedYear), int.parse(selectedMonth), index + 1);
-              List<HabitLog> dayLogs = widget.habitLogs
-                  .where(
-                    (log) => isSameDay(log.date!, date),
-                  )
-                  .toList();
-
-              Color tileColor = Colors.grey.shade400;
-              String tooltipText = '';
-
-              if (dayLogs.isNotEmpty) {
-                int completeCount =
-                    dayLogs.where((log) => log.action == 'complete').length;
-                int reverseCount =
-                    dayLogs.where((log) => log.action == 'reverse').length;
-
-                if (reverseCount > 0) {
-                  tileColor = Colors.red;
-                  tooltipText = 'Reversed a habit';
-                } else if (completeCount > 0) {
-                  tileColor = widget.baseColor;
-                  if (completeCount > 1) {
-                    tileColor = tileColor
-                        .withAlpha(255); // Full opacity for multiple logs
-                  } else {
-                    tileColor = tileColor.withAlpha(
-                        200); // Slightly reduced opacity for single log
-                  }
-                  tooltipText = completeCount > 1
-                      ? "$completeCount habits completed"
-                      : "1 habit completed";
-                }
-              }
-
-              return Tooltip(
-                decoration: BoxDecoration(
-                  color: tileColor,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-                preferBelow: false,
-                triggerMode: TooltipTriggerMode.longPress,
-                richMessage: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: formatDate(date),
-                      style: Get.theme.textTheme.bodySmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const TextSpan(text: '\n'),
-                    TextSpan(
-                      text: tooltipText,
-                      style: Get.theme.textTheme.bodySmall,
-                    ),
-                  ],
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    widget.onDaySelected(dayLogs);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: tileColor,
-                      borderRadius: BorderRadius.circular(2),
-                      border: Border.all(
-                        color: index == selectedDay - 1
-                            ? Get.theme.primaryColor
-                            : Colors.transparent,
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
+          ),
+          const TextSpan(text: '\n'),
+          TextSpan(
+            text: tooltipText,
+            style: Get.theme.textTheme.bodySmall,
           ),
         ],
+      ),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            selectedDate = date;
+          });
+          widget.onDaySelected(dayLogs);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: tileColor,
+            borderRadius: BorderRadius.circular(2),
+            border: Border.all(
+              color: isSelected ? Get.theme.primaryColor : Colors.transparent,
+            ),
+          ),
+        ),
       ),
     );
   }

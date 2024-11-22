@@ -28,7 +28,9 @@ class HomeScreen extends StatelessWidget {
                       ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.toNamed('/calender');
+                  },
                   child: const Text("See all"),
                 ),
               ],

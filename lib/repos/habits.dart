@@ -27,4 +27,26 @@ class HabitsRepository {
   Future<Response> completeHabit(HabitLog habitLog) async {
     return await httpWrapper.post('$base' 'log', data: habitLog.toJson());
   }
+
+  Future<Response> getHabitByDate(DateTime date) async {
+    return await httpWrapper.get('$base' 'by-date', queryParameters: {
+      'date': date.toIso8601String(),
+    });
+  }
+
+  Future<Response> getHabitLogsRange(
+      int habitId, DateTime startDate, DateTime endDate) async {
+    return await httpWrapper
+        .get('$base$habitId/logs/by-date-range', queryParameters: {
+      'startDate': startDate.toIso8601String(),
+      'endDate': endDate.toIso8601String(),
+    });
+  }
+
+  Future<Response> getTimeSpent(DateTime startDate, DateTime endDate) async {
+    return await httpWrapper.get('$base' 'mytimespent', queryParameters: {
+      'startDate': startDate.toIso8601String(),
+      'endDate': endDate.toIso8601String(),
+    });
+  }
 }

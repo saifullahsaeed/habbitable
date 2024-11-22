@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "687283615129",
+    "project_id": "habbitable",
+    "storage_bucket": "habbitable.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687283615129:android:5b93b29515578754124f08",
+        "android_client_info": {
+          "package_name": "com.pynees.habbitable"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR2RZOc_WBjr3Sv7HlrE5Z4-MrNAMcumk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
