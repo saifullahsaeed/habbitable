@@ -7,16 +7,31 @@ import 'package:shimmer/shimmer.dart';
 
 class TimeSpentChart extends StatefulWidget {
   final List<int> timeSpents;
+  final bool hideTitle;
+  final String title;
+  final String subtitle;
+  final Color? titleColor;
+  final Color? subtitleColor;
+  final Color? barColor;
+  final Color? barBackgroundColor;
+  final Color? touchedBarColor;
+  final Color? barTextColor;
+  final Color? dayLetterColor;
 
   TimeSpentChart({
     super.key,
     List<int>? timeSpents,
+    this.hideTitle = false,
+    this.title = 'Title',
+    this.subtitle = 'Subtitle',
+    this.titleColor,
+    this.subtitleColor,
+    this.barColor,
+    this.barBackgroundColor,
+    this.touchedBarColor,
+    this.barTextColor,
+    this.dayLetterColor,
   }) : timeSpents = timeSpents ?? [];
-
-  final Color barBackgroundColor =
-      Get.theme.colorScheme.primary.withOpacity(0.2);
-  final Color barColor = Get.theme.colorScheme.primary;
-  final Color touchedBarColor = Get.theme.colorScheme.secondary;
 
   @override
   State<StatefulWidget> createState() => TimeSpentChartState();
@@ -51,9 +66,10 @@ class TimeSpentChartState extends State<TimeSpentChart> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Time Spent',
+                      widget.title,
                       style: Get.textTheme.titleMedium!.copyWith(
-                        color: Get.theme.colorScheme.primary,
+                        color:
+                            widget.titleColor ?? Get.theme.colorScheme.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -61,14 +77,15 @@ class TimeSpentChartState extends State<TimeSpentChart> {
                     Text(
                       minutesToHours(widget.timeSpents.reduce((a, b) => a + b)),
                       style: Get.textTheme.bodyLarge!.copyWith(
-                        color: Get.theme.colorScheme.primary,
+                        color: widget.subtitleColor ??
+                            Get.theme.colorScheme.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
                 Text(
-                  'Time spent this week on habits',
+                  widget.subtitle,
                   style: Get.textTheme.bodySmall!.copyWith(
                     color: Get.theme.colorScheme.secondary,
                   ),

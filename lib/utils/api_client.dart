@@ -1,13 +1,16 @@
 import 'package:dio/dio.dart';
-// import 'package:habbitable/Services/authentication.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/get_instance.dart';
+import 'package:habbitable/Services/authentication.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HttpWrapper {
-  final String baseUrl = "http://localhost:3000/";
+  final String baseUrl = "http://192.168.1.16:3000/";
   final int timeout = 10000; //timeout in milliseconds 1s = 1000ms
   final String contentType = "application/json";
   final Dio dio = Dio();
   late Future<SharedPreferences> sharedPreferences;
+  final String refreshTokenPath = "auth/refresh";
 
   HttpWrapper() {
     sharedPreferences = SharedPreferences.getInstance();
@@ -17,11 +20,19 @@ class HttpWrapper {
         options.headers['Authorization'] = 'Bearer $token';
         return handler.next(options);
       },
-      // onError: (DioException e, ErrorInterceptorHandler handler) async {
-      //   if (e.response?.statusCode == 401) {
-      //     return handler.next(e);
-      //   }
-      // },
+      onError: (DioException e, ErrorInterceptorHandler handler) async {
+        final authService = Get.find<GlobalAuthenticationService>();
+        if (e.response?.statusCode == 401 && authService.isLoggedIn) {
+          final options = e.requestOptions;
+          try {
+            await authService.refreshToken();
+            return handler.resolve(await dio.fetch(options));
+          } catch (error) {
+            authService.logout();
+          }
+        }
+        return handler.next(e);
+      },
     ));
   }
 

@@ -25,7 +25,7 @@ class ProgressScreen extends StatelessWidget {
                 children: [
                   ValueCard(
                     title: "Habits Completed",
-                    value: "100",
+                    value: "12",
                   ),
                   const SizedBox(width: 10),
                   ValueCard(
@@ -35,8 +35,8 @@ class ProgressScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   ValueCard(
-                    title: "Total Habits",
-                    value: "100",
+                    title: "Total Habits Active",
+                    value: "3",
                   ),
                 ],
               ),
@@ -119,13 +119,64 @@ class ProgressScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               FutureBuilder(
-                  future: controller.getTimeSpent(),
-                  builder: (context, snapshot) {
-                    if (snapshot.data == null || snapshot.data!.isEmpty) {
-                      return TimeSpentChart(timeSpents: [0, 0, 0, 0, 0, 0, 0]);
-                    }
-                    return TimeSpentChart(timeSpents: snapshot.data!);
-                  }),
+                future: controller.getTimeSpent(),
+                builder: (context, snapshot) {
+                  if (snapshot.data == null || snapshot.data!.isEmpty) {
+                    return TimeSpentChart(
+                      timeSpents: [0, 0, 0, 0, 0, 0, 0],
+                      title: 'Time spent',
+                      subtitle: 'Time spent this week on habits',
+                      barColor: Get.theme.colorScheme.primary,
+                      barBackgroundColor:
+                          Get.theme.colorScheme.primary.withOpacity(0.2),
+                      touchedBarColor: Get.theme.colorScheme.secondary,
+                      barTextColor: Get.theme.colorScheme.primary,
+                      dayLetterColor: Get.theme.colorScheme.primary,
+                    );
+                  }
+                  return TimeSpentChart(
+                    timeSpents: snapshot.data!,
+                    title: 'Time spent',
+                    subtitle: 'Time spent this week on habits',
+                    barColor: Get.theme.colorScheme.primary,
+                    barBackgroundColor:
+                        Get.theme.colorScheme.primary.withOpacity(0.2),
+                    touchedBarColor: Get.theme.colorScheme.secondary,
+                    barTextColor: Get.theme.colorScheme.primary,
+                    dayLetterColor: Get.theme.colorScheme.primary,
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
+              FutureBuilder(
+                future: controller.getTimeSpent(),
+                builder: (context, snapshot) {
+                  if (snapshot.data == null || snapshot.data!.isEmpty) {
+                    return TimeSpentChart(
+                      timeSpents: [0, 0, 0, 0, 0, 0, 0],
+                      title: 'Completion Rate',
+                      subtitle: 'Completion rate this week habits (%)',
+                      barColor: Get.theme.colorScheme.primary.withOpacity(0.2),
+                      barBackgroundColor:
+                          Get.theme.colorScheme.primary.withOpacity(0.1),
+                      touchedBarColor: Get.theme.colorScheme.secondary,
+                      barTextColor: Get.theme.colorScheme.primary,
+                      dayLetterColor: Get.theme.colorScheme.primary,
+                    );
+                  }
+                  return TimeSpentChart(
+                    timeSpents: snapshot.data!,
+                    title: 'Completion Rate',
+                    subtitle: 'Completion rate this week habits (%)',
+                    barColor: Get.theme.colorScheme.primary,
+                    barBackgroundColor:
+                        Get.theme.colorScheme.primary.withOpacity(0.1),
+                    touchedBarColor: Get.theme.colorScheme.secondary,
+                    barTextColor: Get.theme.colorScheme.primary,
+                    dayLetterColor: Get.theme.colorScheme.primary,
+                  );
+                },
+              ),
             ],
           ),
         ),

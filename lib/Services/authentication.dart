@@ -61,12 +61,16 @@ class GlobalAuthenticationService extends GetxController {
     try {
       final response = await authRepository
           .refreshToken(localStorageService.getData("refresh_token"));
-      localStorageService.setData("token", response.data['access_token']);
-      localStorageService.setData(
-          "refresh_token", response.data['refresh_token']);
-      return 1;
+      if (response.statusCode == 201) {
+        localStorageService.setData("token", response.data['access_token']);
+        localStorageService.setData(
+            "refresh_token", response.data['refresh_token']);
+        return 1;
+      } else {
+        throw Exception("Failed to refresh token");
+      }
     } catch (e) {
-      return 0;
+      throw Exception("Failed to refresh token");
     }
   }
 
@@ -89,4 +93,6 @@ class GlobalAuthenticationService extends GetxController {
     localStorageService.clearData();
     Get.offAllNamed('/auth');
   }
+
+  bool get isLoggedIn => localStorageService.getData("token") != null;
 }

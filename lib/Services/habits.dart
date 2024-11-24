@@ -21,7 +21,9 @@ class HabitsService extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadHabits(DateTime.now());
+    if (authService.isLoggedIn) {
+      loadHabits(DateTime.now());
+    }
   }
 
   Future<void> loadHabits(DateTime date) async {
