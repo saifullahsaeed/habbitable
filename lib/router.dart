@@ -19,6 +19,8 @@ import 'package:habbitable/screens/habit/controllers/controller.dart';
 import 'package:habbitable/screens/habit/create.dart';
 import 'package:habbitable/screens/habit/habit.dart';
 import 'package:habbitable/screens/habit/users.dart';
+import 'package:habbitable/screens/notifications/controllers/controller.dart';
+import 'package:habbitable/screens/notifications/screen.dart';
 import 'package:habbitable/screens/profile/controllers/profilecontroller.dart';
 import 'package:habbitable/screens/profile/edit.dart';
 import 'package:habbitable/screens/profile/profile.dart';
@@ -164,5 +166,14 @@ final List<GetPage<dynamic>> routes = [
   GetPage(
     name: '/calender',
     page: () => const HabitCalenderScreen(),
+  ),
+  GetPage(
+    name: '/notifications',
+    page: () => const NotificationsScreen(),
+    bindings: [
+      BindingsBuilder(() {
+        Get.lazyPut(() => NotificationsController());
+      }),
+    ],
   ),
 ];

@@ -4,28 +4,21 @@ import 'package:get/get.dart';
 import 'package:habbitable/Services/local_storage.dart';
 import 'package:habbitable/models/user.dart';
 import 'package:habbitable/repos/auth.dart';
+import 'package:habbitable/Services/notifications.dart';
 import 'package:habbitable/utils/snackbar.dart';
+import 'package:habbitable/repos/notifications.dart';
 
 class GlobalAuthenticationService extends GetxController {
   bool get isAuthenticated =>
       Get.find<LocalStorageService>().getData("token") != null;
   LocalStorageService localStorageService = Get.find<LocalStorageService>();
+  NotificationsService notificationsService = Get.find<NotificationsService>();
   AuthRepository authRepository = AuthRepository();
+  NotificationsRepository notificationsRepository = NotificationsRepository();
 
   @override
   Future<void> onInit() async {
     super.onInit();
-    // if (localStorageService.getData("token") != null) {
-    //   await verifyToken(localStorageService.getData("token")).then((value) {
-    //     if (value != 201) {
-    //       refreshToken();
-    //     } else {
-    //       logout();
-    //     }
-    //   });
-    // } else {
-    //   logout();
-    // }
   }
 
   Future<bool> signup(SignupModel signupModel) async {
@@ -51,6 +44,12 @@ class GlobalAuthenticationService extends GetxController {
       localStorageService.setData(
           "refresh_token", response.data['refresh_token']);
       localStorageService.setData("user", response.data['user']);
+      String? fcmToken = await notificationsService.getFcmToken();
+      if (fcmToken != null) {
+        notificationsRepository.setFcmToken(fcmToken);
+        notificationsService.unsubscribeFromTopic('guest');
+        notificationsService.subscribeToTopic('authenticated_user');
+      }
       Get.offAllNamed('/');
     } catch (e) {
       showSnackBar(title: 'Error', message: e.toString(), type: 'error');
@@ -88,7 +87,11 @@ class GlobalAuthenticationService extends GetxController {
     }
   }
 
-  void logout() {
+  Future<void> logout() async {
+    String? fcmToken = localStorageService.getData("fcm_token");
+    if (fcmToken != null) {
+      await notificationsRepository.deleteFcmToken(fcmToken);
+    }
     authRepository.logout();
     localStorageService.clearData();
     Get.offAllNamed('/auth');

@@ -32,7 +32,9 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         actions: [
           if (showNotifications ?? false)
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.toNamed('/notifications');
+              },
               icon: const Icon(Icons.notifications_none),
             ),
           ...actions ?? [],

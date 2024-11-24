@@ -89,9 +89,9 @@ class HttpWrapper {
     }
   }
 
-  Future<Response> delete(String path) async {
+  Future<Response> delete(String path, {Map<String, dynamic>? data}) async {
     try {
-      return await dio.delete(baseUrl + path);
+      return await dio.delete(baseUrl + path, data: data);
     } on DioException catch (e) {
       throw Exception(e.response?.data['message']);
     } catch (e) {

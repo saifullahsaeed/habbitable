@@ -33,6 +33,7 @@ class NotificationsService extends GetxService {
     await _initLocalNotifications();
     await _setupFirebaseMessaging();
     await initInAppMessaging();
+    await subscribeToTopic('guest');
   }
 
   Future<void> requestNotificationPermission() async {
@@ -53,7 +54,7 @@ class NotificationsService extends GetxService {
 
     await flutterLocalNotificationsPlugin.initialize(
       InitializationSettings(
-        android: const AndroidInitializationSettings('@mipmap/ic_launcher'),
+        android: const AndroidInitializationSettings('@mipmap/launcher_icon'),
         iOS: initializationSettingsDarwin,
       ),
       onDidReceiveNotificationResponse: _handleNotificationResponse,
@@ -106,7 +107,7 @@ class NotificationsService extends GetxService {
           'Default Channel',
           importance: Importance.max,
           priority: Priority.high,
-          icon: '@mipmap/ic_launcher',
+          icon: '@mipmap/launcher_icon',
         ),
       ),
       payload: message.data['link'],
