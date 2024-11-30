@@ -162,6 +162,7 @@ class OutlinedButtonCustom extends StatelessWidget {
         label,
         style: Get.textTheme.bodySmall!.copyWith(
           color: color ?? Get.theme.colorScheme.onSurface,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );

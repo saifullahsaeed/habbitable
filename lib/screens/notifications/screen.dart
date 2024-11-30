@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:habbitable/models/notification.dart';
+import 'package:habbitable/widgets/mainappbar.dart';
 import 'controllers/controller.dart';
 
 class NotificationsScreen extends GetView<NotificationsController> {
@@ -8,11 +10,22 @@ class NotificationsScreen extends GetView<NotificationsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Notifications')),
-      body: Obx(() => ListView.builder(
-          itemCount: controller.notifications.length,
-          itemBuilder: (context, index) =>
-              Text(controller.notifications[index].title))),
+      appBar: MainAppBar(
+        title: 'Notifications',
+        showBackButton: true,
+        showNotifications: false,
+      ),
+      body: Column(
+        children: [
+          Obx(() => Expanded(
+                  child: ListView.builder(
+                itemCount: NotificationCategory.values.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) =>
+                    Chip(label: Text(NotificationCategory.values[index].name)),
+              ))),
+        ],
+      ),
     );
   }
 }

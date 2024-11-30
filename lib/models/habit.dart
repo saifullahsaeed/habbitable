@@ -148,3 +148,32 @@ class Habit {
     );
   }
 }
+
+class HabitInvite {
+  int id;
+  User userInvited;
+  Habit habit;
+  bool accepted;
+  DateTime createdAt;
+  DateTime updatedAt;
+
+  HabitInvite({
+    required this.id,
+    required this.userInvited,
+    required this.habit,
+    required this.accepted,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory HabitInvite.fromJson(Map<String, dynamic> json) {
+    return HabitInvite(
+      id: json['id'],
+      userInvited: User.fromJson(json['userInvited']),
+      habit: Habit.fromJson(json['habit']),
+      accepted: json['accepted'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+    );
+  }
+}

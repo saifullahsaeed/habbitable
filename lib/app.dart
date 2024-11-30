@@ -4,6 +4,7 @@ import 'package:habbitable/Services/authentication.dart';
 import 'package:habbitable/Services/habits.dart';
 import 'package:habbitable/Services/theme.dart';
 import 'package:habbitable/router.dart';
+import 'package:habbitable/screens/community/controllers/comunity_controller.dart';
 import 'package:habbitable/style/theme.dart';
 import 'package:habbitable/utils/consts.dart';
 
@@ -37,6 +38,10 @@ class MyApp extends StatelessWidget {
         );
         Get.put(
           HabitsService(),
+          permanent: true,
+        );
+        Get.put(
+          CommunityController(),
           permanent: true,
         );
       },

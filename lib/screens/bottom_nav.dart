@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:habbitable/screens/comunity.dart';
+import 'package:habbitable/screens/community/comunity.dart';
 import 'package:habbitable/screens/progress/progress.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:habbitable/screens/home.dart';

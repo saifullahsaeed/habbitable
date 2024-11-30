@@ -26,12 +26,22 @@ class InitialsImagePlaceholder extends StatelessWidget {
           : name[0];
       return CircleAvatar(
         radius: radius.toDouble(),
-        child: Text(initials),
+        child: Text(initials,
+            style: TextStyle(
+              fontSize: radius * 0.5,
+              fontWeight: FontWeight.w600,
+            )),
       );
     }
     return CircleAvatar(
       radius: radius.toDouble(),
-      child: Text(name.split(' ').map((e) => e[0]).take(2).join()),
+      child: Text(
+        name.split(' ').map((e) => e[0]).take(2).join(),
+        style: TextStyle(
+          fontSize: radius * 0.6,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
     );
   }
 }
