@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:habbitable/widgets/button.dart';
 import 'package:habbitable/widgets/input.dart';
 import 'package:habbitable/widgets/setting_tile.dart';
-import 'package:line_icons/line_icons.dart';
 
 class ReportOptions extends StatelessWidget {
   final BuildContext context;

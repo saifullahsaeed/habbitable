@@ -4,8 +4,6 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:habbitable/models/user.dart';
 import 'package:habbitable/screens/community/widgets/search_user_tile.dart';
-import 'package:habbitable/utils/consts.dart';
-import 'package:habbitable/widgets/intials_image_placeholder.dart';
 
 TextFormField buildInput({
   required String label,

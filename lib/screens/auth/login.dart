@@ -26,9 +26,10 @@ class LoginScreen extends GetView<AuthController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  const SizedBox(height: 50),
                   const Image(
                     image: AssetImage('assets/images/logo.png'),
-                    width: 200,
+                    width: 50,
                   ),
                   const SizedBox(height: 20),
                   Text(

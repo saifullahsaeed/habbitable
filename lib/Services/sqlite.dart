@@ -265,8 +265,6 @@ class SqliteService extends GetxService {
     if (maps == null || maps.isEmpty) {
       return [];
     }
-    print(
-        maps.map((map) => DateTime.parse(map['date'].toString()).day).toList());
     return maps.map((map) => HabitLog.fromJson(map)).toList();
   }
 
@@ -340,7 +338,7 @@ class SqliteService extends GetxService {
       }
       await database?.insert('habit_logs', data);
     } catch (e) {
-      print(e);
+      throw Exception(e);
     }
   }
 

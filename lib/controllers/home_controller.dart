@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:habbitable/Services/habits.dart';
 import 'package:habbitable/models/habit.dart';
-import 'package:habbitable/models/time_spent.dart';
 import 'package:habbitable/utils/functions.dart';
 
 class HomeController extends GetxController {

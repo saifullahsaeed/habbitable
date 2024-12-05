@@ -6,6 +6,7 @@ enum NotificationType {
 }
 
 enum NotificationCategory {
+  all,
   promotion,
   update,
   alert,
@@ -18,7 +19,7 @@ enum NotificationPriority {
   high,
 }
 
-class Notification {
+class NotificationModel {
   final int id;
   final int userId;
   final NotificationType type;
@@ -26,7 +27,7 @@ class Notification {
   final NotificationPriority priority;
   final String title;
   final String message;
-  final bool read;
+  bool read;
   final String? link;
   final String? metadata;
   final bool dismissed;
@@ -34,7 +35,7 @@ class Notification {
   final DateTime? readAt;
   final DateTime? expiresAt;
 
-  Notification({
+  NotificationModel({
     required this.id,
     required this.userId,
     this.type = NotificationType.info,
@@ -51,8 +52,8 @@ class Notification {
     this.expiresAt,
   });
 
-  factory Notification.fromJson(Map<String, dynamic> json) {
-    return Notification(
+  factory NotificationModel.fromJson(Map<String, dynamic> json) {
+    return NotificationModel(
       id: json['id'] as int,
       userId: json['userId'] as int,
       type: NotificationType.values.firstWhere(

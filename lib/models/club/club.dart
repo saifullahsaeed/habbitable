@@ -1,0 +1,60 @@
+import 'package:habbitable/models/image.dart';
+import 'package:habbitable/models/user.dart';
+
+class Club {
+  int id;
+  String name;
+  String description;
+  int imageId;
+  String slug;
+  bool isPrivate;
+  bool isVerified;
+  bool isActive;
+  bool isArchived;
+  int ownerId;
+  DateTime createdAt;
+  DateTime updatedAt;
+  ImageModel image;
+  User owner;
+
+  Club({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.imageId,
+    required this.slug,
+    required this.isPrivate,
+    required this.isVerified,
+    required this.isActive,
+    required this.isArchived,
+    required this.ownerId,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.image,
+    required this.owner,
+  });
+
+  factory Club.fromJson(Map<String, dynamic> json) => Club(
+        id: json["id"],
+        name: json["name"],
+        description: json["description"],
+        imageId: json["imageId"],
+        slug: json["slug"],
+        isPrivate: json["isPrivate"],
+        isVerified: json["isVerified"],
+        isActive: json["isActive"],
+        isArchived: json["isArchived"],
+        ownerId: json["ownerId"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        image: ImageModel.fromJson(json["image"]),
+        owner: User.fromJson(json["owner"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "description": description,
+        "imageId": imageId,
+        "isPrivate": isPrivate,
+      };
+}

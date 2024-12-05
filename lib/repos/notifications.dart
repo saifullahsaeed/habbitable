@@ -11,32 +11,33 @@ class NotificationsRepository {
     int limit = 50,
     int offset = 0,
   }) async {
-    return await httpWrapper.get('$base?limit=$limit&offset=$offset');
+    String url = '$base?limit=$limit&offset=$offset';
+    return await httpWrapper.get(url);
   }
 
   //read all notifications
   Future<Response> readNotifications() async {
-    return await httpWrapper.post('$base/read');
+    return await httpWrapper.post('${base}read');
   }
 
   //dismiss notification
   Future<Response> dismissNotification(String id) async {
-    return await httpWrapper.post('$base/dismiss/$id');
+    return await httpWrapper.post('${base}dismiss/$id');
   }
 
   //read notification
   Future<Response> readNotification(String id) async {
-    return await httpWrapper.post('$base/read/$id');
+    return await httpWrapper.patch('${base}read/$id');
   }
 
   //clear notifications
   Future<Response> clearNotifications() async {
-    return await httpWrapper.delete('$base');
+    return await httpWrapper.delete(base);
   }
 
   //remove notification
   Future<Response> removeNotification(String id) async {
-    return await httpWrapper.delete('$base/$id');
+    return await httpWrapper.delete('$base$id');
   }
 
   Future<Response> setFcmToken(String token) async {

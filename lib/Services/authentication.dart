@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:habbitable/Services/local_storage.dart';
+import 'package:habbitable/Services/notifications.dart';
 import 'package:habbitable/models/user.dart';
 import 'package:habbitable/repos/auth.dart';
-import 'package:habbitable/Services/notifications.dart';
-import 'package:habbitable/utils/snackbar.dart';
 import 'package:habbitable/repos/notifications.dart';
+import 'package:habbitable/utils/snackbar.dart';
 
 class GlobalAuthenticationService extends GetxController {
   bool get isAuthenticated =>

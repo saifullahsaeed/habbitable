@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:habbitable/models/notification.dart';
+import 'package:habbitable/screens/notifications/widgets/notification_tile.dart';
 import 'package:habbitable/widgets/mainappbar.dart';
+import 'package:line_icons/line_icons.dart';
+
 import 'controllers/controller.dart';
 
 class NotificationsScreen extends GetView<NotificationsController> {
@@ -14,17 +16,29 @@ class NotificationsScreen extends GetView<NotificationsController> {
         title: 'Notifications',
         showBackButton: true,
         showNotifications: false,
-      ),
-      body: Column(
-        children: [
-          Obx(() => Expanded(
-                  child: ListView.builder(
-                itemCount: NotificationCategory.values.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) =>
-                    Chip(label: Text(NotificationCategory.values[index].name)),
-              ))),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              LineIcons.filter,
+              size: 22,
+            ),
+          ),
         ],
+      ),
+      body: Obx(
+        () => controller.isLoading.value
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : ListView.builder(
+                itemCount: controller.notifications.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) => NotificationItem(
+                  notification: controller.notifications[index],
+                  controller: controller,
+                ),
+              ),
       ),
     );
   }

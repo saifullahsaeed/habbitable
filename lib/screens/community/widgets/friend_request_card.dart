@@ -27,9 +27,9 @@ class FriendRequestCard extends StatelessWidget {
         color: Get.theme.colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Get.theme.colorScheme.outlineVariant.withOpacity(0.2),
-            blurRadius: 2,
-            spreadRadius: 2,
+            color: Get.theme.colorScheme.onSurface.withOpacity(0.2),
+            blurRadius: 10,
+            spreadRadius: 1,
           ),
         ],
       ),
@@ -82,14 +82,14 @@ class FriendRequestCard extends StatelessWidget {
                 child: OutlinedButtonCustom(
                   onPressed: onReject,
                   color: Get.theme.colorScheme.error,
-                  label: "Reject Request",
+                  label: "Deny",
                 ),
               ),
               const SizedBox(width: 10),
               Expanded(
                 child: MainButton(
                   onPressed: onAccept,
-                  label: "Accept Request",
+                  label: "Accept",
                 ),
               ),
             ],

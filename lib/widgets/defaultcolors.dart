@@ -92,6 +92,7 @@ class ColorPickerPage extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _ColorPickerPageState createState() => _ColorPickerPageState();
 }
 

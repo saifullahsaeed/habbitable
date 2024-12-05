@@ -6,13 +6,21 @@ class NotificationsController extends GetxController
     with GetSingleTickerProviderStateMixin {
   final NotificationsRepository notificationsRepository =
       NotificationsRepository();
-  RxList<Notification> notifications = RxList<Notification>();
+  RxList<NotificationModel> notifications = RxList<NotificationModel>();
   RxBool isLoading = RxBool(false);
+  Rx<NotificationCategory> selectedCategory =
+      Rx<NotificationCategory>(NotificationCategory.all);
   Rx<NotificationType?> notificationType = Rx<NotificationType?>(null);
   Rx<NotificationCategory?> notificationCategory =
       Rx<NotificationCategory?>(null);
   Rx<NotificationPriority?> notificationPriority =
       Rx<NotificationPriority?>(null);
+
+  @override
+  void onInit() {
+    super.onInit();
+    getNotifications();
+  }
 
   //get notifications
   Future<void> getNotifications() async {
@@ -20,11 +28,18 @@ class NotificationsController extends GetxController
     final response = await notificationsRepository.getNotifications();
     if (response.statusCode == 200) {
       notifications.value = response.data
-          .map((n) => Notification.fromJson(n))
+          .map((n) => NotificationModel.fromJson(n))
           .toList()
-          .cast<Notification>();
+          .cast<NotificationModel>();
       notifications.refresh();
     }
     isLoading.value = false;
+  }
+
+  //read notification
+  Future<void> readNotification(int id) async {
+    notifications.firstWhere((n) => n.id == id).read = true;
+    notifications.refresh();
+    notificationsRepository.readNotification(id.toString());
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:habbitable/screens/auth/controllers/auth_controller.dart';
 import 'package:habbitable/style/text.dart';
-import 'package:habbitable/utils/load_action.dart';
 import 'package:habbitable/utils/validators.dart';
 import 'package:habbitable/widgets/button.dart';
 import 'package:habbitable/widgets/input.dart';
@@ -34,9 +33,10 @@ class _SignupScreenState extends State<SignupScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  const SizedBox(height: 50),
                   const Image(
                     image: AssetImage('assets/images/logo.png'),
-                    width: 200,
+                    width: 50,
                   ),
                   const SizedBox(height: 20),
                   Text(

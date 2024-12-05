@@ -6,6 +6,7 @@ class Loader extends StatefulWidget {
 
   const Loader({super.key, required this.action, required this.child});
   @override
+  // ignore: library_private_types_in_public_api
   _LoaderState createState() => _LoaderState();
 }
 

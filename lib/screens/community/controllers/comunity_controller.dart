@@ -32,6 +32,7 @@ class CommunityController extends GetxController {
       queueInAction.add(receivedRequestsList
           .firstWhere((request) => request.id == requestId));
       receivedRequestsList.removeWhere((request) => request.id == requestId);
+      refresh();
       showSnackBar(
         title: "Request accepted",
         message: "Friend request accepted",
@@ -43,6 +44,7 @@ class CommunityController extends GetxController {
           queueInAction.firstWhere((request) => request.id == requestId);
       receivedRequestsList.insert(0, request);
       queueInAction.removeWhere((request) => request.id == requestId);
+      refresh();
       showSnackBar(
         title: "Something went wrong",
         message: "Please try again",
