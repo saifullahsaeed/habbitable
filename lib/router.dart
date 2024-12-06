@@ -9,6 +9,8 @@ import 'package:habbitable/screens/auth/reset_password.dart';
 import 'package:habbitable/screens/auth/signup.dart';
 import 'package:habbitable/screens/bottom_nav.dart';
 import 'package:habbitable/screens/community/club/club.dart';
+import 'package:habbitable/screens/community/club/controllers/create_club.dart';
+import 'package:habbitable/screens/community/club/create.dart';
 import 'package:habbitable/screens/community/club/details.dart';
 import 'package:habbitable/screens/community/controllers/search_controller.dart';
 import 'package:habbitable/screens/community/my_friends.dart';
@@ -175,6 +177,15 @@ final List<GetPage<dynamic>> routes = [
     bindings: [
       BindingsBuilder(() {
         Get.lazyPut(() => NotificationsController());
+      }),
+    ],
+  ),
+  GetPage(
+    name: '/createclub',
+    page: () => const CreateClubScreen(),
+    bindings: [
+      BindingsBuilder(() {
+        Get.lazyPut(() => CreateClubController());
       }),
     ],
   ),

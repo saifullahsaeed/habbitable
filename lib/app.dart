@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:habbitable/Services/authentication.dart';
+import 'package:habbitable/Services/clubs.dart';
 import 'package:habbitable/Services/habits.dart';
 import 'package:habbitable/Services/theme.dart';
+import 'package:habbitable/Services/upload.dart';
 import 'package:habbitable/router.dart';
 import 'package:habbitable/screens/community/controllers/comunity_controller.dart';
 import 'package:habbitable/style/theme.dart';
@@ -41,7 +43,15 @@ class MyApp extends StatelessWidget {
           permanent: true,
         );
         Get.put(
+          ClubsService(),
+          permanent: true,
+        );
+        Get.put(
           CommunityController(),
+          permanent: true,
+        );
+        Get.put(
+          UploadService(),
           permanent: true,
         );
       },

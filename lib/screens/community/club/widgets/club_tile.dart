@@ -16,15 +16,15 @@ class ClubTile extends StatelessWidget {
           horizontal: 10,
           vertical: 8,
         ),
+        margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: Get.theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color:
-                  Theme.of(context).colorScheme.outlineVariant.withOpacity(0.2),
-              blurRadius: 10,
-              spreadRadius: 1,
+              color: Get.theme.colorScheme.outlineVariant.withOpacity(0.2),
+              blurRadius: 5,
+              spreadRadius: 0.5,
             ),
           ],
         ),
@@ -33,7 +33,8 @@ class ClubTile extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 25,
-              backgroundImage: NetworkImage(club.image.url),
+              backgroundImage:
+                  club.image != null ? NetworkImage(club.image!.url) : null,
             ),
             const SizedBox(width: 10),
             Expanded(

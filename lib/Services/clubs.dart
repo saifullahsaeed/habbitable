@@ -18,8 +18,20 @@ class ClubsService extends GetxService {
     return Club.fromJson(res.data);
   }
 
-  Future<Club> createClub(Club club) async {
-    final res = await clubRepository.createClub(club.toJson());
+  Future<Club> createClub({
+    required String name,
+    required String description,
+    String? imageId,
+    bool isPrivate = false,
+  }) async {
+    final res = await clubRepository.createClub(
+      {
+        "name": name,
+        "description": description,
+        "image": imageId,
+        "isPrivate": isPrivate,
+      },
+    );
     return Club.fromJson(res.data);
   }
 }

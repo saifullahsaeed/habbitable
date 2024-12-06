@@ -3,7 +3,7 @@ import 'package:habbitable/utils/api_client.dart';
 
 class ClubRepository {
   final HttpWrapper httpWrapper;
-  final String base = "club/";
+  final String base = "clubs/";
   ClubRepository() : httpWrapper = HttpWrapper();
 
   Future<Response> getMyClubs() async {

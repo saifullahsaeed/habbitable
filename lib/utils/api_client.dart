@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:habbitable/Services/authentication.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HttpWrapper {
@@ -91,7 +92,12 @@ class HttpWrapper {
 
   Future<Response> delete(String path, {Map<String, dynamic>? data}) async {
     try {
-      return await dio.delete(baseUrl + path, data: data);
+      return await dio.delete(baseUrl + path,
+          data: data,
+          options: Options(
+            contentType: contentType,
+            responseType: ResponseType.json,
+          ));
     } on DioException catch (e) {
       throw Exception(e.response?.data['message']);
     } catch (e) {
@@ -101,7 +107,45 @@ class HttpWrapper {
 
   Future<Response> patch(String path, {Map<String, dynamic>? data}) async {
     try {
-      return await dio.patch(baseUrl + path, data: data);
+      return await dio.patch(baseUrl + path,
+          data: data,
+          options: Options(
+            contentType: contentType,
+            responseType: ResponseType.json,
+          ));
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message']);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<Response> upload(String path, String filePath) async {
+    // Get MIME type based on file extension
+    final extension = filePath.split('.').last.toLowerCase();
+    final mimeType = {
+          'jpg': 'image/jpeg',
+          'jpeg': 'image/jpeg',
+          'png': 'image/png',
+          'gif': 'image/gif',
+        }[extension] ??
+        'application/octet-stream';
+
+    final file = await MultipartFile.fromFile(
+      filePath,
+      contentType: MediaType.parse(mimeType),
+    );
+
+    final formData = FormData.fromMap({'file': file});
+    try {
+      return await dio.post(
+        baseUrl + path,
+        data: formData,
+        options: Options(
+          contentType: "multipart/form-data",
+          responseType: ResponseType.json,
+        ),
+      );
     } on DioException catch (e) {
       throw Exception(e.response?.data['message']);
     } catch (e) {

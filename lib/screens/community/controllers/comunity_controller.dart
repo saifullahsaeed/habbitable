@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:habbitable/Services/clubs.dart';
+import 'package:habbitable/models/club/club.dart';
 import 'package:habbitable/models/friend.dart';
 import 'package:habbitable/models/habit.dart';
 import 'package:habbitable/repos/user.dart';
@@ -7,9 +9,18 @@ import 'package:habbitable/utils/snackbar.dart';
 class CommunityController extends GetxController {
   final sentRequests = <HabitInvite>[].obs;
   UserRepository userRepository = UserRepository();
+  final clubsService = Get.find<ClubsService>();
   Rx<List<FriendRequest>> receivedRequests = Rx<List<FriendRequest>>([]);
   List<FriendRequest> get receivedRequestsList => receivedRequests.value;
   List<FriendRequest> queueInAction = [];
+  List<Club> clubs = [];
+
+  Future<void> getClubs() async {
+    List<Club> clubsResponse = await clubsService.getMyClubs();
+    if (clubsResponse.isNotEmpty) {
+      clubs = clubsResponse;
+    }
+  }
 
   Future<void> getReceivedRequests() async {
     try {

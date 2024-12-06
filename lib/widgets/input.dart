@@ -49,9 +49,6 @@ TextFormField buildInput({
       suffixIconConstraints: const BoxConstraints(
         maxHeight: 20,
       ),
-
-      //max length style
-      counterText: '',
       helperStyle: Get.theme.textTheme.bodySmall,
       contentPadding: const EdgeInsets.symmetric(
         vertical: 10,

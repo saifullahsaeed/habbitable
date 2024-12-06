@@ -5,7 +5,7 @@ class Club {
   int id;
   String name;
   String description;
-  int imageId;
+  int? imageId;
   String slug;
   bool isPrivate;
   bool isVerified;
@@ -14,14 +14,14 @@ class Club {
   int ownerId;
   DateTime createdAt;
   DateTime updatedAt;
-  ImageModel image;
+  ImageModel? image;
   User owner;
 
   Club({
     required this.id,
     required this.name,
     required this.description,
-    required this.imageId,
+    this.imageId,
     required this.slug,
     required this.isPrivate,
     required this.isVerified,
@@ -30,7 +30,7 @@ class Club {
     required this.ownerId,
     required this.createdAt,
     required this.updatedAt,
-    required this.image,
+    this.image,
     required this.owner,
   });
 
@@ -47,7 +47,8 @@ class Club {
         ownerId: json["ownerId"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
-        image: ImageModel.fromJson(json["image"]),
+        image:
+            json["image"] != null ? ImageModel.fromJson(json["image"]) : null,
         owner: User.fromJson(json["owner"]),
       );
 

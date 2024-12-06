@@ -6,8 +6,8 @@ class UploadRepository {
   final String base = "files/";
   UploadRepository() : httpWrapper = HttpWrapper();
 
-  Future<Response> uploadImage(String file) async {
-    return await httpWrapper.post(base, data: {'file': file});
+  Future<Response> uploadImage(String filePath) async {
+    return await httpWrapper.upload(base, filePath);
   }
 
   Future<Response> deleteImage(String file) async {
