@@ -1,11 +1,13 @@
 import 'package:get/get.dart';
 import 'package:habbitable/models/club/club.dart';
+import 'package:habbitable/models/club/comment.dart';
+import 'package:habbitable/models/club/details.dart';
+import 'package:habbitable/models/club/post.dart';
 import 'package:habbitable/repos/club.dart';
 
 class ClubsService extends GetxService {
   final ClubRepository clubRepository;
   ClubsService() : clubRepository = ClubRepository();
-
   Future<List<Club>> getMyClubs() async {
     final res = await clubRepository.getMyClubs();
     final List<Club> clubs =
@@ -13,9 +15,9 @@ class ClubsService extends GetxService {
     return clubs;
   }
 
-  Future<Club> getClub(String id) async {
+  Future<ClubDetails> getClub(String id) async {
     final res = await clubRepository.getClub(id);
-    return Club.fromJson(res.data);
+    return ClubDetails.fromJson(res.data);
   }
 
   Future<Club> createClub({
@@ -33,5 +35,29 @@ class ClubsService extends GetxService {
       },
     );
     return Club.fromJson(res.data);
+  }
+
+  Future<List<Post>> getFeed(int limit, int offset) async {
+    final res = await clubRepository.getFeed(limit, offset);
+    return res.data.map((c) => Post.fromJson(c)).toList().cast<Post>();
+  }
+
+  Future<bool> likePost(String clubId, String postId) async {
+    final res = await clubRepository.likeClubPost(clubId, postId);
+    return res.statusCode == 200;
+  }
+
+  Future<List<CommentModel>> getPostComments(
+      String clubId, String postId, int limit, int offset) async {
+    final res =
+        await clubRepository.getPostComments(clubId, postId, limit, offset);
+    return res.data
+        .map((c) => CommentModel.fromJson(c))
+        .toList()
+        .cast<CommentModel>();
+  }
+
+  Future<void> postComment(String clubId, String postId, String content) async {
+    await clubRepository.addPostComment(clubId, postId, {"content": content});
   }
 }

@@ -9,9 +9,12 @@ import 'package:habbitable/screens/auth/reset_password.dart';
 import 'package:habbitable/screens/auth/signup.dart';
 import 'package:habbitable/screens/bottom_nav.dart';
 import 'package:habbitable/screens/community/club/club.dart';
+import 'package:habbitable/screens/community/club/controllers/club_details.dart';
 import 'package:habbitable/screens/community/club/controllers/create_club.dart';
+import 'package:habbitable/screens/community/club/controllers/post_controller.dart';
 import 'package:habbitable/screens/community/club/create.dart';
 import 'package:habbitable/screens/community/club/details.dart';
+import 'package:habbitable/screens/community/club/post.dart';
 import 'package:habbitable/screens/community/controllers/search_controller.dart';
 import 'package:habbitable/screens/community/my_friends.dart';
 import 'package:habbitable/screens/community/received_requests.dart';
@@ -200,6 +203,20 @@ final List<GetPage<dynamic>> routes = [
         page: () => ClubDetailsScreen(
           clubId: Get.parameters['clubId']!,
         ),
+        bindings: [
+          BindingsBuilder(() {
+            Get.lazyPut(() => ClubDetailsController());
+          }),
+        ],
+      ),
+      GetPage(
+        name: '/post',
+        page: () => PostScreen(),
+        bindings: [
+          BindingsBuilder(() {
+            Get.lazyPut(() => PostController());
+          }),
+        ],
       ),
     ],
   ),

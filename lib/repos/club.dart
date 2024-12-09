@@ -62,8 +62,10 @@ class ClubRepository {
     return await httpWrapper.post('$base$clubId/like-post/$postId');
   }
 
-  Future<Response> getPostComments(String clubId, String postId) async {
-    return await httpWrapper.get('$base$clubId/comments/$postId');
+  Future<Response> getPostComments(
+      String clubId, String postId, int limit, int offset) async {
+    return await httpWrapper
+        .get('$base$clubId/comments/$postId?limit=$limit&offset=$offset');
   }
 
   Future<Response> addPostComment(
@@ -78,5 +80,11 @@ class ClubRepository {
 
   Future<Response> likeComment(String clubId, String commentId) async {
     return await httpWrapper.post('$base$clubId/like-comment/$commentId');
+  }
+
+  Future<Response> getFeed(int limit, int offset) async {
+    final res =
+        await httpWrapper.get('$base' 'feed?limit=$limit&offset=$offset');
+    return res;
   }
 }

@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:habbitable/Services/clubs.dart';
-import 'package:habbitable/models/club/club.dart';
+import 'package:habbitable/models/club/post.dart';
 import 'package:habbitable/models/friend.dart';
 import 'package:habbitable/models/habit.dart';
 import 'package:habbitable/repos/user.dart';
@@ -13,13 +13,23 @@ class CommunityController extends GetxController {
   Rx<List<FriendRequest>> receivedRequests = Rx<List<FriendRequest>>([]);
   List<FriendRequest> get receivedRequestsList => receivedRequests.value;
   List<FriendRequest> queueInAction = [];
-  List<Club> clubs = [];
+  List<Post> posts = [];
 
-  Future<void> getClubs() async {
-    List<Club> clubsResponse = await clubsService.getMyClubs();
-    if (clubsResponse.isNotEmpty) {
-      clubs = clubsResponse;
+  Future<void> getFeed() async {
+    List<Post> postsResponse = await clubsService.getFeed(10, 0);
+    if (postsResponse.isNotEmpty) {
+      posts = postsResponse;
     }
+  }
+
+  Future<void> likePost(int clubId, int postId) async {
+    bool isLiked = posts.firstWhere((post) => post.id == postId).isLiked;
+    posts.firstWhere((post) => post.id == postId).isLiked = !isLiked;
+    clubsService.likePost(clubId.toString(), postId.toString()).then((value) {
+      if (value) {
+        posts.firstWhere((post) => post.id == postId).isLiked = !isLiked;
+      }
+    });
   }
 
   Future<void> getReceivedRequests() async {

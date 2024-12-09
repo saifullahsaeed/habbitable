@@ -1,9 +1,12 @@
+import 'package:habbitable/models/image.dart';
+
 class User {
   final int id;
   final String name;
   final String email;
   final int? age;
   final String? gender;
+  final ImageModel? avatar;
   final bool? friend;
   final bool? sentRequest;
 
@@ -13,6 +16,7 @@ class User {
     required this.email,
     this.age,
     this.gender,
+    this.avatar,
     this.friend = false,
     this.sentRequest = false,
   });
@@ -25,14 +29,8 @@ class User {
       'email': email,
       'age': age,
       'gender': gender,
+      'avatar': avatar?.toJson(),
     };
-  }
-
-  // Implement toString to make it easier to see information about
-  // each user when using the print statement.
-  @override
-  String toString() {
-    return 'User{id: $id, name: $name, email: $email}';
   }
 
   // Create a User from a JSON object.
@@ -43,6 +41,8 @@ class User {
       email: json['email'],
       age: json['age'],
       gender: json['gender'],
+      avatar:
+          json['avatar'] != null ? ImageModel.fromJson(json['avatar']) : null,
       friend: json['friend'] ?? false,
       sentRequest: json['sentRequest'] ?? false,
     );

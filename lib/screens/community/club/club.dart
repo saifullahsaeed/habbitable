@@ -6,6 +6,15 @@ class ClubScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Club"),
+      ),
+      body: Column(
+        children: [
+          Text("Club"),
+        ],
+      ),
+    );
   }
 }

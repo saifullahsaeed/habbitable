@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:habbitable/screens/community/club/widgets/club_tile.dart';
+import 'package:habbitable/screens/community/club/widgets/home_post.dart';
 import 'package:habbitable/screens/community/controllers/comunity_controller.dart';
 import 'package:habbitable/screens/community/widgets/friend_request_card.dart';
 import 'package:habbitable/widgets/mainappbar.dart';
@@ -164,27 +164,36 @@ class ComunityScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10),
               child: FutureBuilder(
-                future: controller.getClubs(),
+                future: controller.getFeed(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
-                  if (controller.clubs.isEmpty) {
+                  if (controller.posts.isEmpty) {
                     return const Center(
-                      child: Text("No clubs found"),
+                      child: Text("No posts found"),
                     );
                   }
+
                   return ListView.builder(
-                    itemCount: controller.clubs.length,
+                    itemCount: controller.posts.length,
                     shrinkWrap: true,
-                    itemBuilder: (context, index) => ClubTile(
-                      club: controller.clubs[index],
-                    ),
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 1,
+                        ),
+                        child: PostCardHome(
+                          post: controller.posts[index],
+                        ),
+                      );
+                    },
                   );
                 },
               ),

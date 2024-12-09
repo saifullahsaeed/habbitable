@@ -23,4 +23,12 @@ class ImageModel {
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
       );
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'url': url,
+      'mimeType': mimeType,
+    };
+  }
 }
