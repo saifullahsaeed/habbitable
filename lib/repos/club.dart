@@ -87,4 +87,15 @@ class ClubRepository {
         await httpWrapper.get('$base' 'feed?limit=$limit&offset=$offset');
     return res;
   }
+
+  Future<Response> getClubFeed(
+    String clubId, {
+    String? feedType = 'hot',
+    int? limit = 10,
+    int? offset = 0,
+  }) async {
+    final res =
+        await httpWrapper.get('$base$clubId/feed?limit=$limit&offset=$offset');
+    return res;
+  }
 }

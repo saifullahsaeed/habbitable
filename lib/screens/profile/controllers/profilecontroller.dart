@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:habbitable/Services/authentication.dart';
+import 'package:habbitable/Services/upload.dart';
 import 'package:habbitable/models/profile.dart';
 import 'package:habbitable/repos/user.dart';
-import 'package:get/get.dart';
 
 class ProfileController extends GetxController {
   final int userId;
@@ -10,6 +11,7 @@ class ProfileController extends GetxController {
   final GlobalAuthenticationService authService =
       Get.find<GlobalAuthenticationService>();
   final TextEditingController reportController = TextEditingController();
+  final UploadService uploadService = UploadService();
   Rx<Profile> profile = Profile.empty().obs;
   late int myId;
   final UserRepository userRepository = UserRepository();

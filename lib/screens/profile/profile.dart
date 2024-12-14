@@ -46,10 +46,17 @@ class ProfileScreen extends GetView<ProfileController> {
                         child: Column(
                           children: [
                             Center(
-                              child: InitialsImagePlaceholder(
-                                name: controller.profile.value.name,
-                                radius: 50,
-                              ),
+                              child: controller.profile.value.avatar != null
+                                  ? CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage: NetworkImage(
+                                        controller.profile.value.avatar!.url,
+                                      ),
+                                    )
+                                  : InitialsImagePlaceholder(
+                                      name: controller.profile.value.name,
+                                      radius: 50,
+                                    ),
                             ),
                             const SizedBox(height: 10),
                             Text(controller.profile.value.name,

@@ -38,6 +38,8 @@ dependencies:
   carousel_slider: ^5.0.0
   image_picker: ^1.1.2
   http_parser: ^4.0.2
+  easy_sticky_header: ^1.1.1
+  flutter_markdown: ^0.7.4+3
 
 dev_dependencies:
   flutter_test:

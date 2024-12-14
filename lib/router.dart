@@ -9,11 +9,14 @@ import 'package:habbitable/screens/auth/reset_password.dart';
 import 'package:habbitable/screens/auth/signup.dart';
 import 'package:habbitable/screens/bottom_nav.dart';
 import 'package:habbitable/screens/community/club/club.dart';
+import 'package:habbitable/screens/community/club/controllers/club_controller.dart';
 import 'package:habbitable/screens/community/club/controllers/club_details.dart';
 import 'package:habbitable/screens/community/club/controllers/create_club.dart';
+import 'package:habbitable/screens/community/club/controllers/new_post_controller.dart';
 import 'package:habbitable/screens/community/club/controllers/post_controller.dart';
 import 'package:habbitable/screens/community/club/create.dart';
 import 'package:habbitable/screens/community/club/details.dart';
+import 'package:habbitable/screens/community/club/new_post.dart';
 import 'package:habbitable/screens/community/club/post.dart';
 import 'package:habbitable/screens/community/controllers/search_controller.dart';
 import 'package:habbitable/screens/community/my_friends.dart';
@@ -28,6 +31,7 @@ import 'package:habbitable/screens/habit/habit.dart';
 import 'package:habbitable/screens/habit/users.dart';
 import 'package:habbitable/screens/notifications/controllers/controller.dart';
 import 'package:habbitable/screens/notifications/screen.dart';
+import 'package:habbitable/screens/profile/controllers/editprofile_controller.dart';
 import 'package:habbitable/screens/profile/controllers/profilecontroller.dart';
 import 'package:habbitable/screens/profile/edit.dart';
 import 'package:habbitable/screens/profile/profile.dart';
@@ -134,9 +138,12 @@ final List<GetPage<dynamic>> routes = [
   ),
   GetPage(
     name: '/editprofile',
-    page: () => EditProfileScreen(
-      user: Get.arguments['user'],
-    ),
+    page: () => EditProfileScreen(),
+    bindings: [
+      BindingsBuilder(() {
+        Get.lazyPut(() => EditProfileController());
+      }),
+    ],
   ),
   GetPage(
     name: '/profile/:userId',
@@ -194,9 +201,12 @@ final List<GetPage<dynamic>> routes = [
   ),
   GetPage(
     name: '/club/:clubId',
-    page: () => ClubScreen(
-      clubId: Get.parameters['clubId']!,
-    ),
+    page: () => ClubScreen(),
+    bindings: [
+      BindingsBuilder(() {
+        Get.lazyPut(() => ClubController());
+      }),
+    ],
     children: [
       GetPage(
         name: '/details',
@@ -215,6 +225,15 @@ final List<GetPage<dynamic>> routes = [
         bindings: [
           BindingsBuilder(() {
             Get.lazyPut(() => PostController());
+          }),
+        ],
+      ),
+      GetPage(
+        name: '/newpost',
+        page: () => NewPostScreen(),
+        bindings: [
+          BindingsBuilder(() {
+            Get.lazyPut(() => NewPostController());
           }),
         ],
       ),

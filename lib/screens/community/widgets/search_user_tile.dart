@@ -28,7 +28,14 @@ class _SearchUserTileState extends State<SearchUserTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: InitialsImagePlaceholder(name: widget.user.name),
+      leading: widget.user.avatar != null
+          ? CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage(
+                widget.user.avatar!.url,
+              ),
+            )
+          : InitialsImagePlaceholder(name: widget.user.name),
       title: Text(widget.user.name),
       trailing: !isLoading
           ? !isRequested

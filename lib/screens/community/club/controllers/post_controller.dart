@@ -13,6 +13,9 @@ class PostController extends GetxController {
       Get.find<GlobalAuthenticationService>();
   FocusNode commentFocusNode = FocusNode();
   RxBool isCommentsLoading = false.obs;
+  Rx<CommentModel?> replyingToComment = Rx<CommentModel?>(null);
+  Rx<List<Map<String, List<CommentModel>>>> commentsReplies =
+      Rx<List<Map<String, List<CommentModel>>>>([]);
   int limit = 10;
   int offset = 0;
 
@@ -38,20 +41,60 @@ class PostController extends GetxController {
     getPostComments(post.clubId.toString(), post.id.toString());
   }
 
-  Future<void> postComment(String clubId, String postId, String content) async {
-    final CommentModel comment = CommentModel(
+  Future<CommentModel> replyToCommentAction(
+    CommentModel parentComment,
+    String content,
+  ) async {
+    replyingToComment.value = parentComment;
+    final CommentModel reply = CommentModel(
       content: content,
       createdAt: DateTime.now(),
       id: 0,
-      likeCount: 0,
-      postId: int.parse(postId),
+      parentId: parentComment.id.toString(),
+      postId: int.parse(post.id.toString()),
       replyCount: 0,
       updatedAt: DateTime.now(),
       userId: authService.currentUser.id,
       user: authService.currentUser,
       isLiked: false,
+      likeCount: 0,
     );
-    comments.insert(0, comment);
-    await clubService.postComment(clubId, postId, content);
+    commentsReplies.value.first[parentComment.id.toString()] = [reply];
+    clubService.replyToComment(post.clubId.toString(), post.id.toString(),
+        parentComment.id.toString(), content);
+
+    return reply;
+  }
+
+  Future<CommentModel> postComment(
+      String clubId, String postId, String content) async {
+    if (replyingToComment.value != null) {
+      return await replyToCommentAction(replyingToComment.value!, content);
+    } else {
+      final CommentModel comment = CommentModel(
+        content: content,
+        createdAt: DateTime.now(),
+        id: 0,
+        likeCount: 0,
+        postId: int.parse(postId),
+        replyCount: 0,
+        updatedAt: DateTime.now(),
+        userId: authService.currentUser.id,
+        user: authService.currentUser,
+        isLiked: false,
+      );
+      comments.insert(0, comment);
+      clubService.postComment(clubId, postId, content);
+      return comment;
+    }
+  }
+
+  void cancelReply() {
+    replyingToComment.value = null;
+  }
+
+  void openInputForReply(CommentModel comment) {
+    replyingToComment.value = comment;
+    commentFocusNode.requestFocus();
   }
 }

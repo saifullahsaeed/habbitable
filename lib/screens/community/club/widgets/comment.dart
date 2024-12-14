@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:habbitable/models/club/comment.dart';
+import 'package:habbitable/screens/community/club/controllers/post_controller.dart';
 import 'package:habbitable/utils/functions.dart';
 import 'package:line_icons/line_icons.dart';
 
 class Comment extends StatefulWidget {
   final CommentModel comment;
   final bool isReply;
+  final bool showActions;
+  final PostController? postController;
+  final bool showReplyOptions;
   const Comment({
     super.key,
     required this.comment,
     this.isReply = false,
+    this.showActions = true,
+    this.postController,
+    this.showReplyOptions = true,
   });
 
   @override
@@ -84,62 +91,107 @@ class _CommentState extends State<Comment> {
             style: Get.textTheme.bodySmall,
           ),
           const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 5,
-            ),
-            decoration: BoxDecoration(
-              color: Get.theme.cardColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      LineIcons.heart,
-                      size: 15,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      widget.comment.likeCount.toString(),
-                      style: Get.textTheme.bodySmall,
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 20),
-                if (!widget.isReply)
+          if (widget.showActions)
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 5,
+              ),
+              decoration: BoxDecoration(
+                color: Get.theme.cardColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
                   Row(
                     children: [
                       Icon(
-                        LineIcons.comments,
+                        LineIcons.heart,
                         size: 15,
                       ),
                       const SizedBox(width: 5),
                       Text(
-                        "${widget.comment.replyCount} replies",
+                        widget.comment.likeCount.toString(),
                         style: Get.textTheme.bodySmall,
                       ),
                     ],
                   ),
-              ],
+                  const SizedBox(width: 20),
+                  if (!widget.isReply)
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          showReplies = !showReplies;
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            LineIcons.comments,
+                            size: 15,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            "${widget.comment.replyCount} replies",
+                            style: Get.textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                  const SizedBox(width: 10),
+                  if (widget.showReplyOptions)
+                    GestureDetector(
+                      onTap: () {
+                        widget.postController
+                            ?.openInputForReply(widget.comment);
+                      },
+                      child: Text(
+                        "Reply to ${widget.comment.user.name}",
+                        style: Get.textTheme.bodySmall!.copyWith(
+                          color: Get.theme.colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
-          // if (showReplies)
-          //   Container(
-          //     margin: const EdgeInsets.only(left: 10),
-          //     child: ListView.builder(
-          //       shrinkWrap: true,
-          //       physics: const NeverScrollableScrollPhysics(),
-          //       itemCount: (widget.comment["subComments"] ?? []).length,
-          //       itemBuilder: (context, index) {
-          //         return CommentReply(
-          //             reply: widget.comment["subComments"][index]);
-          //       },
-          //     ),
-          //   ),
+          if (showReplies)
+            Obx(() {
+              if (widget.postController?.commentsReplies.value.isNotEmpty ??
+                  false) {
+                if (widget.postController?.commentsReplies.value
+                        .firstWhereOrNull((element) =>
+                            element.containsKey(widget.comment.id.toString()))
+                        ?.isNotEmpty ??
+                    false) {
+                  Container(
+                    margin: const EdgeInsets.only(left: 10),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: widget.postController?.commentsReplies.value
+                              .firstWhereOrNull((element) => element
+                                  .containsKey(widget.comment.id.toString()))
+                              ?.length ??
+                          0,
+                      itemBuilder: (context, index) {
+                        return CommentReply(
+                          reply: widget.postController?.commentsReplies.value
+                                  .firstWhereOrNull((element) =>
+                                      element.containsKey(
+                                          widget.comment.id.toString()))
+                                  ?.values
+                                  .first[index] ??
+                              widget.comment,
+                        );
+                      },
+                    ),
+                  );
+                }
+              }
+              return const SizedBox.shrink();
+            }),
         ],
       ),
     );

@@ -10,6 +10,10 @@ class UserRepository {
     return await httpWrapper.get('$base$userId/profile');
   }
 
+  Future<Response> updateProfile(int userId, Map<String, dynamic> data) async {
+    return await httpWrapper.put('$base' 'profile', data: data);
+  }
+
   Future<Response> getMyFriends(int? skip, int? limit) async {
     return await httpWrapper.get('$base' 'friends', queryParameters: {
       'skip': skip,

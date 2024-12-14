@@ -40,10 +40,17 @@ class SettingsScreen extends StatelessWidget {
                     },
                     child: Row(
                       children: [
-                        InitialsImagePlaceholder(
-                          name: user.name,
-                          radius: 25,
-                        ),
+                        user.avatar != null
+                            ? CircleAvatar(
+                                radius: 25,
+                                backgroundImage: NetworkImage(
+                                  user.avatar!.url,
+                                ),
+                              )
+                            : InitialsImagePlaceholder(
+                                name: user.name,
+                                radius: 25,
+                              ),
                         const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

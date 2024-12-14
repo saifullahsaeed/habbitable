@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:habbitable/models/club/post.dart';
+import 'package:habbitable/screens/community/club/widgets/comment.dart';
 import 'package:habbitable/screens/community/club/widgets/post_actions_bar.dart';
 import 'package:habbitable/screens/community/club/widgets/post_content.dart';
 import 'package:habbitable/screens/community/club/widgets/post_header.dart';
@@ -46,12 +47,16 @@ class PostWidget extends StatelessWidget {
           const SizedBox(height: 10),
           PostActionsBar(post: post),
           const SizedBox(height: 10),
-          Divider(
-            color: Get.theme.colorScheme.outlineVariant.withOpacity(0.1),
-            height: 1,
-          ),
-          // top comment
-          // Comment(),
+          if (post.topComment != null) ...[
+            Divider(
+              color: Get.theme.colorScheme.outlineVariant.withOpacity(0.1),
+              height: 1,
+            ),
+            Comment(
+              comment: post.topComment!,
+              showActions: false,
+            ),
+          ],
         ],
       ),
     );

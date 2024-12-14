@@ -98,12 +98,25 @@ class _MyFriendsScreenState extends State<MyFriendsScreen> {
                                           },
                                         );
                                       },
-                                      child: InitialsImagePlaceholder(
-                                        name: Friend.otherUser(
-                                                friends[index], me.id)
-                                            .name,
-                                        radius: 20,
-                                      ),
+                                      child: Friend.otherUser(
+                                                      friends[index], me.id)
+                                                  .avatar !=
+                                              null
+                                          ? CircleAvatar(
+                                              radius: 20,
+                                              backgroundImage: NetworkImage(
+                                                Friend.otherUser(
+                                                        friends[index], me.id)
+                                                    .avatar!
+                                                    .url,
+                                              ),
+                                            )
+                                          : InitialsImagePlaceholder(
+                                              name: Friend.otherUser(
+                                                      friends[index], me.id)
+                                                  .name,
+                                              radius: 20,
+                                            ),
                                     ),
                                     const SizedBox(width: 10),
                                     Expanded(

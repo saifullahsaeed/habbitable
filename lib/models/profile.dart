@@ -1,5 +1,6 @@
 import 'package:habbitable/models/friend.dart';
 import 'package:habbitable/models/habit.dart';
+import 'package:habbitable/models/image.dart';
 
 class Profile {
   final int id;
@@ -10,6 +11,7 @@ class Profile {
   final List<Friend> friends;
   final int totalFriendsCount;
   final int totalHabitsCount;
+  ImageModel? avatar;
   bool isFriend;
   bool requestSent;
   bool requestReceived;
@@ -25,7 +27,8 @@ class Profile {
       required this.totalHabitsCount,
       required this.isFriend,
       required this.requestSent,
-      required this.requestReceived});
+      required this.requestReceived,
+      required this.avatar});
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
         id: json['id'],
@@ -45,6 +48,8 @@ class Profile {
         isFriend: json['friend'] ?? false,
         requestSent: json['requestSent'] ?? false,
         requestReceived: json['requestReceived'] ?? false,
+        avatar:
+            json['avatar'] != null ? ImageModel.fromJson(json['avatar']) : null,
       );
 
   static Profile empty() => Profile(
@@ -59,5 +64,6 @@ class Profile {
         isFriend: false,
         requestSent: false,
         requestReceived: false,
+        avatar: null,
       );
 }

@@ -9,7 +9,7 @@ import 'package:habbitable/screens/community/club/widgets/post_header.dart';
 import 'package:habbitable/widgets/mainappbar.dart';
 
 class PostScreen extends GetView<PostController> {
-  PostScreen({super.key});
+  const PostScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,10 @@ class PostScreen extends GetView<PostController> {
                     if (controller.isCommentsLoading.value) {
                       return const SizedBox.shrink();
                     }
-                    return Comment(comment: controller.comments[index - 1]);
+                    return Comment(
+                      comment: controller.comments[index - 1],
+                      postController: controller,
+                    );
                   }
                   if (index == controller.comments.length + 1 &&
                       controller.comments.isNotEmpty &&
@@ -92,6 +95,7 @@ class PostScreen extends GetView<PostController> {
             clubId: controller.post.clubId.toString(),
             focusNode: controller.commentFocusNode,
             onSubmit: controller.postComment,
+            postController: controller,
           ),
         ],
       ),

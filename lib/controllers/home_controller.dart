@@ -63,7 +63,7 @@ class HomeController extends GetxController {
     List<int> result = List<int>.filled(7, 0);
     for (var t in data) {
       int dayOfWeek = t.date.weekday;
-      dayOfWeek = dayOfWeek == 7 ? 0 : dayOfWeek;
+      dayOfWeek = dayOfWeek == 1 ? 0 : dayOfWeek - 1;
       result[dayOfWeek] = t.totalTime;
     }
     return result;

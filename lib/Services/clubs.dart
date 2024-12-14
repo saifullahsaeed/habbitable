@@ -7,6 +7,8 @@ import 'package:habbitable/repos/club.dart';
 
 class ClubsService extends GetxService {
   final ClubRepository clubRepository;
+  // listinable variable
+  final Rx<List<String>> actionPulser = Rx<List<String>>([]);
   ClubsService() : clubRepository = ClubRepository();
   Future<List<Club>> getMyClubs() async {
     final res = await clubRepository.getMyClubs();
@@ -42,6 +44,12 @@ class ClubsService extends GetxService {
     return res.data.map((c) => Post.fromJson(c)).toList().cast<Post>();
   }
 
+  Future<List<Post>> getClubFeed(String clubId, int limit, int offset) async {
+    final res =
+        await clubRepository.getClubFeed(clubId, limit: limit, offset: offset);
+    return res.data.map((c) => Post.fromJson(c)).toList().cast<Post>();
+  }
+
   Future<bool> likePost(String clubId, String postId) async {
     final res = await clubRepository.likeClubPost(clubId, postId);
     return res.statusCode == 200;
@@ -59,5 +67,21 @@ class ClubsService extends GetxService {
 
   Future<void> postComment(String clubId, String postId, String content) async {
     await clubRepository.addPostComment(clubId, postId, {"content": content});
+  }
+
+  Future<void> replyToComment(
+      String clubId, String postId, String parentId, String content) async {
+    await clubRepository.addPostComment(clubId, postId, {
+      "content": content,
+      "parentId": parentId,
+    });
+  }
+
+  Future<int> addPost(String clubId, Map<String, dynamic> data) async {
+    final res = await clubRepository.addClubPost(clubId, data);
+    if (res.statusCode == 201) {
+      actionPulser.update((state) => [...?state, 'addPost']);
+    }
+    return res.statusCode ?? 500;
   }
 }

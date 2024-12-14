@@ -20,57 +20,39 @@ class HomePostHeader extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Stack(
-          children: [
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(10),
-                color: Get.theme.colorScheme.surface,
-                image: DecorationImage(
-                  image: NetworkImage(
-                    club.image?.url ?? "",
-                  ),
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.2),
-                    BlendMode.darken,
-                  ),
-                ),
+        Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(10),
+            color: Get.theme.colorScheme.surface,
+            image: DecorationImage(
+              image: NetworkImage(
+                club.image?.url ?? "",
+              ),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2),
+                BlendMode.darken,
               ),
             ),
-            Positioned(
-              right: 3,
-              bottom: 3,
-              child: Container(
-                width: 25,
-                height: 25,
-                decoration: BoxDecoration(
-                  color: Get.theme.colorScheme.secondary,
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(5),
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      "https://cdn.habbitable.com/thumb-1920-1345029.png",
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
         const SizedBox(width: 10),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                club.name,
-                style: Get.textTheme.titleSmall!.copyWith(
-                  fontWeight: FontWeight.bold,
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed('/club/${club.id}');
+                },
+                child: Text(
+                  club.name,
+                  style: Get.textTheme.titleSmall!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               RichText(

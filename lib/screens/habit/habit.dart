@@ -236,11 +236,23 @@ class HabitScreen extends GetView<HabitScreenController> {
                                 child: Wrap(
                                   crossAxisAlignment: WrapCrossAlignment.center,
                                   children: [
-                                    InitialsImagePlaceholder(
-                                      name: controller.selectedDayLogs[index]
-                                              .user?.name ??
-                                          "",
-                                    ),
+                                    controller.selectedDayLogs[index].user
+                                                ?.avatar !=
+                                            null
+                                        ? CircleAvatar(
+                                            radius: 20,
+                                            backgroundImage: NetworkImage(
+                                              controller.selectedDayLogs[index]
+                                                  .user!.avatar!.url,
+                                            ),
+                                          )
+                                        : InitialsImagePlaceholder(
+                                            name: controller
+                                                    .selectedDayLogs[index]
+                                                    .user
+                                                    ?.name ??
+                                                "",
+                                          ),
                                     const SizedBox(width: 5),
                                     Text(
                                       controller.selectedDayLogs[index].user

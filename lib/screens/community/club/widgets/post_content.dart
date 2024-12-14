@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
 import 'package:habbitable/models/club/post.dart';
 
@@ -23,48 +24,26 @@ class PostContent extends StatelessWidget {
       onTap: () {
         Get.toNamed('/club/1/post', arguments: {'post': post});
       },
-      child: RichText(
-        textAlign: TextAlign.start,
-        text: TextSpan(
-          style: Get.textTheme.bodyMedium,
-          children: _buildTextSpans(),
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Markdown(
+            data: content,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            styleSheet: MarkdownStyleSheet(
+              p: Get.textTheme.bodyMedium,
+            ),
+            selectable: true,
+            onTapText: () {
+              Get.toNamed('/club/1/post', arguments: {'post': post});
+            },
+            padding: EdgeInsets.zero,
+          ),
+        ],
       ),
     );
-  }
-
-  List<TextSpan> _buildTextSpans() {
-    List<TextSpan> spans = [];
-
-    // Split content by spaces to process each word
-    List<String> words = content.split(' ');
-
-    for (int i = 0; i < words.length; i++) {
-      String word = words[i];
-      // Check if the word is a hashtag
-      if (hashtags.any((tag) => word.toLowerCase() == '#$tag'.toLowerCase())) {
-        spans.add(TextSpan(
-          text: '$word ',
-          style: Get.textTheme.bodyMedium!.copyWith(
-            color: Get.theme.colorScheme.primary,
-          ),
-        ));
-      } else {
-        spans.add(TextSpan(text: '$word '));
-      }
-    }
-
-    // Add the hashtags section at the bottom
-    if (hashtags.isNotEmpty) {
-      spans.add(const TextSpan(text: '\n\n'));
-      spans.add(TextSpan(
-        text: hashtags.map((e) => "#$e").join(" "),
-        style: Get.textTheme.bodyMedium!.copyWith(
-          color: Get.theme.colorScheme.primary,
-        ),
-      ));
-    }
-
-    return spans;
   }
 }

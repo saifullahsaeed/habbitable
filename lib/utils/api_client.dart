@@ -6,7 +6,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HttpWrapper {
-  final String baseUrl = "http://192.168.1.16:3000/";
+  final String baseUrl = "http://192.168.1.5:3000/";
   final int timeout = 10000; //timeout in milliseconds 1s = 1000ms
   final String contentType = "application/json";
   final Dio dio = Dio();

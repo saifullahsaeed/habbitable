@@ -57,7 +57,7 @@ class ClubDetailsScreen extends GetView<ClubDetailsController> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          snapshot.data!.club.description ?? "",
+                          snapshot.data!.club.description,
                           maxLines: 10,
                           overflow: TextOverflow.ellipsis,
                           style: Get.textTheme.bodyMedium,

@@ -4,10 +4,10 @@ import 'package:habbitable/models/friend.dart';
 import 'package:habbitable/repos/user.dart';
 import 'package:habbitable/screens/community/controllers/comunity_controller.dart';
 import 'package:habbitable/screens/community/widgets/empty_screen.dart';
+import 'package:habbitable/screens/community/widgets/friend_request_card.dart';
 import 'package:habbitable/widgets/loader.dart';
 import 'package:habbitable/widgets/mainappbar.dart';
 import 'package:swipe_refresh/swipe_refresh.dart';
-import 'package:habbitable/screens/community/widgets/friend_request_card.dart';
 
 class ReceivedRequestsScreen extends StatefulWidget {
   const ReceivedRequestsScreen({super.key});
@@ -24,7 +24,12 @@ class _ReceivedRequestsScreenState extends State<ReceivedRequestsScreen> {
   @override
   void initState() {
     super.initState();
-    controller.getReceivedRequests();
+    controller.getReceivedRequests().then((value) {
+      setState(() {
+        receivedRequests = value;
+        isLoading = false;
+      });
+    });
   }
 
   Future<void> rejectRequest(int id) async {
@@ -60,33 +65,29 @@ class _ReceivedRequestsScreenState extends State<ReceivedRequestsScreen> {
             );
           }
 
-          return Obx(() {
-            if (controller.receivedRequestsList.isEmpty) {
-              return const EmptySocialScreen(
-                title: "No Requests",
-                subtitle: "You have no received requests",
-              );
-            }
-
-            return SwipeRefresh.builder(
-              stateStream: Stream.value(SwipeRefreshState.hidden),
-              itemCount: controller.receivedRequestsList.length,
-              shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              onRefresh: () async {
-                controller.getReceivedRequests();
-              },
-              itemBuilder: (context, index) {
-                return FriendRequestCard(
-                  request: controller.receivedRequestsList[index],
-                  onAccept: () =>
-                      acceptRequest(controller.receivedRequestsList[index].id),
-                  onReject: () =>
-                      rejectRequest(controller.receivedRequestsList[index].id),
-                );
-              },
+          if (receivedRequests.isEmpty) {
+            return const EmptySocialScreen(
+              title: "No Requests",
+              subtitle: "You have no received requests",
             );
-          });
+          }
+
+          return SwipeRefresh.builder(
+            stateStream: Stream.value(SwipeRefreshState.hidden),
+            itemCount: receivedRequests.length,
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            onRefresh: () async {
+              controller.getReceivedRequests();
+            },
+            itemBuilder: (context, index) {
+              return FriendRequestCard(
+                request: receivedRequests[index],
+                onAccept: () => acceptRequest(receivedRequests[index].id),
+                onReject: () => rejectRequest(receivedRequests[index].id),
+              );
+            },
+          );
         },
       ),
     );

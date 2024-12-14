@@ -40,10 +40,17 @@ class SentRequestItem extends StatelessWidget {
               Expanded(
                 child: Row(
                   children: [
-                    InitialsImagePlaceholder(
-                      name: request.addressee.name,
-                      radius: 16,
-                    ),
+                    request.addressee.avatar != null
+                        ? CircleAvatar(
+                            radius: 16,
+                            backgroundImage: NetworkImage(
+                              request.addressee.avatar!.url,
+                            ),
+                          )
+                        : InitialsImagePlaceholder(
+                            name: request.addressee.name,
+                            radius: 16,
+                          ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(

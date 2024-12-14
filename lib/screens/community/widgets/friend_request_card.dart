@@ -42,10 +42,17 @@ class FriendRequestCard extends StatelessWidget {
               Expanded(
                 child: Row(
                   children: [
-                    InitialsImagePlaceholder(
-                      name: request.requester.name,
-                      radius: 20,
-                    ),
+                    request.requester.avatar != null
+                        ? CircleAvatar(
+                            radius: 20,
+                            backgroundImage: NetworkImage(
+                              request.requester.avatar!.url,
+                            ),
+                          )
+                        : InitialsImagePlaceholder(
+                            name: request.requester.name,
+                            radius: 20,
+                          ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(

@@ -42,9 +42,16 @@ class _HabitUsersScreenState extends State<HabitUsersScreen> {
                 borderRadius: BorderRadius.circular(10),
               ),
               tileColor: Get.theme.cardColor,
-              leading: InitialsImagePlaceholder(
-                name: widget.habit.owner.name,
-              ),
+              leading: widget.habit.owner.avatar != null
+                  ? CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage(
+                        widget.habit.owner.avatar!.url,
+                      ),
+                    )
+                  : InitialsImagePlaceholder(
+                      name: widget.habit.owner.name,
+                    ),
               title: Text(
                 widget.habit.owner.name,
                 style: Get.theme.textTheme.bodyMedium!.copyWith(
@@ -75,9 +82,16 @@ class _HabitUsersScreenState extends State<HabitUsersScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     tileColor: Get.theme.cardColor,
-                    leading: InitialsImagePlaceholder(
-                      name: widget.habit.users[index].name,
-                    ),
+                    leading: widget.habit.users[index].avatar != null
+                        ? CircleAvatar(
+                            radius: 20,
+                            backgroundImage: NetworkImage(
+                              widget.habit.users[index].avatar!.url,
+                            ),
+                          )
+                        : InitialsImagePlaceholder(
+                            name: widget.habit.users[index].name,
+                          ),
                     title: Text(widget.habit.users[index].name),
                     trailing: Icon(
                       Icons.chevron_right,

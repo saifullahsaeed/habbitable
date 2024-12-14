@@ -45,4 +45,34 @@ class CommentModel {
       isLiked: json['isLiked'] ?? false,
     );
   }
+
+  CommentModel copyWith({
+    int? id,
+    int? postId,
+    int? userId,
+    String? content,
+    String? gif,
+    String? parentId,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    User? user,
+    int? likeCount,
+    int? replyCount,
+    bool? isLiked,
+  }) {
+    return CommentModel(
+      id: id ?? this.id,
+      postId: postId ?? this.postId,
+      userId: userId ?? this.userId,
+      content: content ?? this.content,
+      gif: gif ?? this.gif,
+      parentId: parentId ?? this.parentId,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      user: user ?? this.user,
+      likeCount: likeCount ?? this.likeCount,
+      replyCount: replyCount ?? this.replyCount,
+      isLiked: isLiked ?? this.isLiked,
+    );
+  }
 }
