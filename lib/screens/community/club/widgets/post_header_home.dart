@@ -48,11 +48,35 @@ class HomePostHeader extends StatelessWidget {
                 onTap: () {
                   Get.toNamed('/club/${club.id}');
                 },
-                child: Text(
-                  club.name,
-                  style: Get.textTheme.titleSmall!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: club.name,
+                              style: Get.textTheme.bodyMedium!.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            if (club.isVerified)
+                              WidgetSpan(
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 4),
+                                  child: Icon(
+                                    Icons.verified,
+                                    size: 16,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               RichText(

@@ -16,7 +16,6 @@ class ClubTile extends StatelessWidget {
           horizontal: 10,
           vertical: 8,
         ),
-        margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
           color: Get.theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(8),
@@ -29,7 +28,7 @@ class ClubTile extends StatelessWidget {
           ],
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CircleAvatar(
               radius: 25,
@@ -40,8 +39,9 @@ class ClubTile extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  const SizedBox(height: 5),
                   Row(
                     children: [
                       Expanded(

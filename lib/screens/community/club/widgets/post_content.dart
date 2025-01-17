@@ -42,6 +42,7 @@ class PostContent extends StatelessWidget {
             },
             padding: EdgeInsets.zero,
           ),
+          const SizedBox(height: 10),
         ],
       ),
     );

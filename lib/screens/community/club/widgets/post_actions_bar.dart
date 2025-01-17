@@ -64,7 +64,8 @@ class _PostActionsBarState extends State<PostActionsBar> {
                 children: [
                   Icon(
                     isLiked ? Icons.favorite : Icons.favorite_border,
-                    color: isLiked ? Colors.red : null,
+                    color:
+                        isLiked ? Colors.red : Get.theme.colorScheme.onPrimary,
                   ),
                   const SizedBox(width: 5),
                   Text(
@@ -103,10 +104,9 @@ class _PostActionsBarState extends State<PostActionsBar> {
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
                   BoxShadow(
-                    color:
-                        Get.theme.colorScheme.outlineVariant.withOpacity(0.2),
-                    blurRadius: 5,
-                    spreadRadius: 0.5,
+                    color: Get.theme.cardColor,
+                    blurRadius: 10,
+                    spreadRadius: 10,
                   ),
                 ],
               ),
@@ -114,7 +114,10 @@ class _PostActionsBarState extends State<PostActionsBar> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(LineIcons.comments),
+                  Icon(
+                    LineIcons.comments,
+                    color: Get.theme.colorScheme.onPrimary,
+                  ),
                   const SizedBox(width: 5),
                   Text(
                     "${widget.post.commentsCount} ${widget.post.commentsCount == 1 ? "Comment" : "Comments"}",

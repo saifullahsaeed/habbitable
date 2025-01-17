@@ -1,3 +1,4 @@
+import 'package:habbitable/models/club/catagory.dart';
 import 'package:habbitable/models/image.dart';
 import 'package:habbitable/models/user.dart';
 
@@ -16,6 +17,10 @@ class Club {
   DateTime updatedAt;
   ImageModel? image;
   User owner;
+  int? numberOfMembers;
+  int? noOfHabits;
+  Catagory? catagory;
+  bool isMember;
 
   Club({
     required this.id,
@@ -32,6 +37,10 @@ class Club {
     required this.updatedAt,
     this.image,
     required this.owner,
+    this.numberOfMembers,
+    this.noOfHabits,
+    this.catagory,
+    this.isMember = false,
   });
 
   factory Club.fromJson(Map<String, dynamic> json) => Club(
@@ -50,6 +59,12 @@ class Club {
         image:
             json["image"] != null ? ImageModel.fromJson(json["image"]) : null,
         owner: User.fromJson(json["owner"]),
+        numberOfMembers: json["noOfMembers"] ?? 0,
+        noOfHabits: json["noOfHabits"] ?? 0,
+        catagory: json["catagory"] != null
+            ? Catagory.fromJson(json["catagory"])
+            : null,
+        isMember: json["isMember"] ?? false,
       );
 
   Map<String, dynamic> toJson() => {

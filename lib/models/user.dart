@@ -52,11 +52,13 @@ class User {
 class SignupModel {
   final String name;
   final String email;
+  final String username;
   final String password;
 
   SignupModel({
     required this.name,
     required this.email,
+    required this.username,
     required this.password,
   });
 
@@ -64,6 +66,7 @@ class SignupModel {
     return {
       'name': name,
       'email': email,
+      'username': username,
       'password': password,
     };
   }
@@ -72,6 +75,7 @@ class SignupModel {
     return SignupModel(
       name: json['name'],
       email: json['email'],
+      username: json['username'],
       password: json['password'],
     );
   }

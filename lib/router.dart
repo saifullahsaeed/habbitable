@@ -12,13 +12,19 @@ import 'package:habbitable/screens/community/club/club.dart';
 import 'package:habbitable/screens/community/club/controllers/club_controller.dart';
 import 'package:habbitable/screens/community/club/controllers/club_details.dart';
 import 'package:habbitable/screens/community/club/controllers/create_club.dart';
+import 'package:habbitable/screens/community/club/controllers/join_club.dart';
+import 'package:habbitable/screens/community/club/controllers/my_clubs.dart';
 import 'package:habbitable/screens/community/club/controllers/new_post_controller.dart';
 import 'package:habbitable/screens/community/club/controllers/post_controller.dart';
 import 'package:habbitable/screens/community/club/create.dart';
 import 'package:habbitable/screens/community/club/details.dart';
+import 'package:habbitable/screens/community/club/join_club.dart';
+import 'package:habbitable/screens/community/club/myclubs.dart';
 import 'package:habbitable/screens/community/club/new_post.dart';
 import 'package:habbitable/screens/community/club/post.dart';
+import 'package:habbitable/screens/community/controllers/explore_controller.dart';
 import 'package:habbitable/screens/community/controllers/search_controller.dart';
+import 'package:habbitable/screens/community/explore.dart';
 import 'package:habbitable/screens/community/my_friends.dart';
 import 'package:habbitable/screens/community/received_requests.dart';
 import 'package:habbitable/screens/community/search_user.dart';
@@ -220,6 +226,17 @@ final List<GetPage<dynamic>> routes = [
         ],
       ),
       GetPage(
+        name: '/join',
+        page: () => JoinClubScreen(
+          club: Get.arguments['club'],
+        ),
+        bindings: [
+          BindingsBuilder(() {
+            Get.lazyPut(() => JoinClubController());
+          }),
+        ],
+      ),
+      GetPage(
         name: '/post',
         page: () => PostScreen(),
         bindings: [
@@ -237,6 +254,24 @@ final List<GetPage<dynamic>> routes = [
           }),
         ],
       ),
+    ],
+  ),
+  GetPage(
+    name: '/explore',
+    page: () => const ExploreScreen(),
+    bindings: [
+      BindingsBuilder(() {
+        Get.lazyPut(() => ExploreController());
+      }),
+    ],
+  ),
+  GetPage(
+    name: '/myclubs',
+    page: () => const MyClubsScreen(),
+    bindings: [
+      BindingsBuilder(() {
+        Get.lazyPut(() => MyClubsController());
+      }),
     ],
   ),
 ];

@@ -6,12 +6,22 @@ class ClubRepository {
   final String base = "clubs/";
   ClubRepository() : httpWrapper = HttpWrapper();
 
-  Future<Response> getMyClubs() async {
-    return await httpWrapper.get(base);
+  Future<Response> getMyClubs({
+    int? limit = 10,
+    int? offset = 0,
+  }) async {
+    return await httpWrapper.get(base, queryParameters: {
+      'limit': limit,
+      'offset': offset,
+    });
   }
 
   Future<Response> getClub(String id) async {
     return await httpWrapper.get('$base$id');
+  }
+
+  Future<Response> getCatagories() async {
+    return await httpWrapper.get('$base' 'categories');
   }
 
   Future<Response> createClub(Map<String, dynamic> data) async {
@@ -97,5 +107,15 @@ class ClubRepository {
     final res =
         await httpWrapper.get('$base$clubId/feed?limit=$limit&offset=$offset');
     return res;
+  }
+
+  Future<Response> getRecommendedClubs(
+      String? category, int limit, int offset) async {
+    return await httpWrapper.get('$base'
+        'recommended/clubs?category=$category&limit=$limit&offset=$offset');
+  }
+
+  Future<Response> joinClub(String clubId) async {
+    return await httpWrapper.post('$base$clubId/join');
   }
 }

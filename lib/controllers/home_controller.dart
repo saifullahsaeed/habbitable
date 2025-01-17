@@ -1,18 +1,24 @@
 import 'package:get/get.dart';
 import 'package:habbitable/Services/habits.dart';
+import 'package:habbitable/Services/notifications.dart';
 import 'package:habbitable/models/habit.dart';
 import 'package:habbitable/utils/functions.dart';
 
 class HomeController extends GetxController {
   final HabitsService habitsService = Get.find<HabitsService>();
   final RxList<Habit> _habits = <Habit>[].obs;
-
+  final NotificationsService notificationsService =
+      Get.find<NotificationsService>();
   RxList<Habit> get habits => _habits;
 
   @override
   void onInit() {
     super.onInit();
     getHabits();
+    //test notification
+    notificationsService.scheduleNotification(
+        "Test", "Test", DateTime.now().add(const Duration(minutes: 1)),
+        repeat: 'daily');
   }
 
   void removeHabit(int habitId) {

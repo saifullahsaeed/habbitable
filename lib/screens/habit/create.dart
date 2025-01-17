@@ -4,11 +4,11 @@ import 'package:habbitable/Services/authentication.dart';
 import 'package:habbitable/controllers/home_controller.dart';
 import 'package:habbitable/models/habit.dart';
 import 'package:habbitable/utils/functions.dart';
-import 'package:habbitable/utils/iconpicker.dart';
 import 'package:habbitable/widgets/button.dart';
 import 'package:habbitable/widgets/dawselector.dart';
 import 'package:habbitable/widgets/defaultcolors.dart';
 import 'package:habbitable/widgets/habitcard.dart';
+import 'package:habbitable/widgets/iconpicker.dart';
 import 'package:habbitable/widgets/input.dart';
 
 class CreateHabitScreen extends StatefulWidget {
@@ -266,6 +266,8 @@ class _CreateHabitScreenState extends State<CreateHabitScreen> {
   Widget _buildIconAndNameInput() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(
           'Icon & Name',
@@ -274,6 +276,9 @@ class _CreateHabitScreenState extends State<CreateHabitScreen> {
         ),
         const SizedBox(height: 5),
         Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               decoration: BoxDecoration(
@@ -329,6 +334,7 @@ class _CreateHabitScreenState extends State<CreateHabitScreen> {
           label: 'Description',
           hint: 'What is this habit about?',
           maxLines: 3,
+          maxLength: 500,
           controller: _descriptionController,
           context: context,
         ),

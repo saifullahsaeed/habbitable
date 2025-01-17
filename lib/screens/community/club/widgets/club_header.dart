@@ -33,12 +33,52 @@ class _ClubScreenHeaderState extends State<ClubScreenHeader> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    controller.clubDetails.value?.club.name ?? "",
-                    style: Get.textTheme.titleLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Get.theme.colorScheme.primary,
+                  Container(
+                    height: 200, // Height for the cover image
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            controller.clubDetails.value?.club.image?.url ??
+                                ""),
+                        fit: BoxFit.cover,
+                      ),
                     ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: controller.clubDetails.value?.club.name ??
+                                    "",
+                                style: Get.textTheme.titleLarge!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Get.theme.colorScheme.primary,
+                                ),
+                              ),
+                              if (controller
+                                      .clubDetails.value?.club.isVerified ??
+                                  false)
+                                WidgetSpan(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 4),
+                                    child: Icon(
+                                      Icons.verified,
+                                      size: 20,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 10),
                   Text(

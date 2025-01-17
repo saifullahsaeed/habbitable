@@ -6,6 +6,7 @@ import 'package:habbitable/models/friend.dart';
 import 'package:habbitable/repos/user.dart';
 import 'package:habbitable/screens/community/club/widgets/home_post.dart';
 import 'package:habbitable/screens/community/club/widgets/newpost_loading.dart';
+import 'package:habbitable/screens/community/widgets/empty_feed.dart';
 import 'package:habbitable/screens/community/widgets/friend_requests_slider.dart';
 import 'package:habbitable/screens/community/widgets/home_action_buttons.dart';
 
@@ -58,6 +59,10 @@ class CommunityController extends GetxController {
         ...feed.value,
         ...postsResponse.map((post) => PostCardHome(post: post))
       ];
+    }
+    if (postsResponse.isEmpty) {
+      feed.value.removeAt(feed.value.length - 1);
+      feed.value = [...feed.value, const EmptyFeed()];
     }
     moreAvailable.value = postsResponse.length == feedLength;
 

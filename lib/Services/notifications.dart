@@ -6,6 +6,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:timezone/data/latest.dart';
+import 'package:timezone/timezone.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -52,9 +54,17 @@ class NotificationsService extends GetxService {
       requestSoundPermission: false,
     );
 
+    final AndroidInitializationSettings androidSettings =
+        AndroidInitializationSettings('@mipmap/launcher_icon');
+    final AndroidFlutterLocalNotificationsPlugin? androidPlugin =
+        flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+
+    await androidPlugin?.requestExactAlarmsPermission();
+
     await flutterLocalNotificationsPlugin.initialize(
       InitializationSettings(
-        android: const AndroidInitializationSettings('@mipmap/launcher_icon'),
+        android: androidSettings,
         iOS: initializationSettingsDarwin,
       ),
       onDidReceiveNotificationResponse: _handleNotificationResponse,
@@ -141,5 +151,91 @@ class NotificationsService extends GetxService {
   void onClose() {
     _messageStreamController.close();
     super.onClose();
+  }
+
+  Future<void> scheduleNotification(
+    String title,
+    String body,
+    DateTime date, {
+    String? repeat = 'daily',
+  }) async {
+    final AndroidFlutterLocalNotificationsPlugin? androidPlugin =
+        flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    final bool? hasPermission =
+        await androidPlugin?.requestExactAlarmsPermission();
+
+    if (hasPermission != true) {
+      throw Exception('Exact alarms permission not granted');
+    }
+
+    initializeTimeZones();
+    // Convert `DateTime` to `tz.TZDateTime`
+    TZDateTime scheduledDate = TZDateTime.local(
+        date.year, date.month, date.day, date.hour, date.minute);
+
+    if (repeat == 'daily') {
+      // Adjust time to repeat daily
+      scheduledDate = _nextInstanceOfTime(date.hour, date.minute);
+    } else if (repeat == 'weekly') {
+      // Adjust time to repeat weekly
+      scheduledDate =
+          _nextInstanceOfWeekly(date.hour, date.minute, date.weekday);
+    } else {
+      return; // Unsupported repeat type
+    }
+
+    await flutterLocalNotificationsPlugin.periodicallyShowWithDuration(
+      title.hashCode, // Unique ID
+      title, // Notification title
+      body, // Notification body
+      const Duration(minutes: 1),
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          'default_channel',
+          'Default Channel',
+          importance: Importance.max,
+          priority: Priority.high,
+          icon: '@mipmap/ic_launcher', // Your app icon
+        ),
+      ),
+      // uiLocalNotificationDateInterpretation:
+      //     UILocalNotificationDateInterpretation.absoluteTime,
+      androidScheduleMode: AndroidScheduleMode.alarmClock,
+      // matchDateTimeComponents: repeat == 'daily'
+      //     ? DateTimeComponents.time
+      //     : DateTimeComponents.dayOfWeekAndTime,
+    );
+
+    //print all scheduled notifications
+    final notifications =
+        await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+    print(notifications.map((e) => e.title).toList());
+  }
+
+  TZDateTime _nextInstanceOfTime(int hour, int minute) {
+    final now = TZDateTime.now(local);
+    var scheduledDate =
+        TZDateTime.local(now.year, now.month, now.day, hour, minute);
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+  TZDateTime _nextInstanceOfWeekly(int hour, int minute, int weekday) {
+    TZDateTime scheduledDate = _nextInstanceOfTime(hour, minute);
+    while (scheduledDate.weekday != weekday) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+  Future<void> cancelNotification(String title) async {
+    await flutterLocalNotificationsPlugin.cancel(title.hashCode);
+  }
+
+  Future<void> cancelAllNotifications() async {
+    await flutterLocalNotificationsPlugin.cancelAll();
   }
 }

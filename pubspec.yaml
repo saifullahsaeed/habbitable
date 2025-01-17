@@ -40,6 +40,7 @@ dependencies:
   http_parser: ^4.0.2
   easy_sticky_header: ^1.1.1
   flutter_markdown: ^0.7.4+3
+  timezone: ^0.10.0
 
 dev_dependencies:
   flutter_test:

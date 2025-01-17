@@ -16,6 +16,7 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final signupFormKey = GlobalKey<FormState>();
   final AuthController controller = Get.find<AuthController>();
@@ -64,6 +65,15 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   const SizedBox(height: 10),
                   buildInput(
+                    label: 'Username',
+                    hint: 'Enter your username',
+                    inputType: TextInputType.text,
+                    controller: usernameController,
+                    validator: (value) => usernameValidator(value),
+                    context: context,
+                  ),
+                  const SizedBox(height: 10),
+                  buildInput(
                     label: 'Password',
                     hint: 'Enter your password',
                     inputType: TextInputType.visiblePassword,
@@ -83,6 +93,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           controller.signup(
                             nameController.text,
                             emailController.text,
+                            usernameController.text,
                             passwordController.text,
                           );
                         }

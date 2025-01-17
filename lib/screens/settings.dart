@@ -185,7 +185,7 @@ class SettingsScreen extends StatelessWidget {
                       return Text(
                         'Version ${snapshot.data?.version}',
                         style: Get.textTheme.bodySmall?.copyWith(
-                          color: Get.theme.hintColor,
+                          color: Get.theme.colorScheme.onSurface,
                         ),
                       );
                     }

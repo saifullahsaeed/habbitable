@@ -39,3 +39,25 @@ Function(String?) nameValidator = (String? value) {
   }
   return null;
 };
+
+Function(String?) usernameValidator = (String? value) {
+  if (value == null) {
+    return 'Please enter your username';
+  }
+  if (value.isEmpty) {
+    return 'Please enter your username';
+  }
+  if (value.length < 6) {
+    return 'Username must be at least 6 characters';
+  }
+  if (value.length > 20) {
+    return 'Username must be less than 20 characters';
+  }
+  if (!RegExp(r'^[a-zA-Z0-9_.]+$').hasMatch(value)) {
+    return 'Username must contain only letters, numbers, _, and .';
+  }
+  if (value.contains(' ')) {
+    return 'Username must not contain spaces';
+  }
+  return null;
+};

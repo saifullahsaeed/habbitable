@@ -14,10 +14,11 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> signup(String name, String email, String password) async {
+  Future<void> signup(
+      String name, String email, String username, String password) async {
     try {
-      SignupModel signupModel =
-          SignupModel(name: name, email: email, password: password);
+      SignupModel signupModel = SignupModel(
+          name: name, email: email, username: username, password: password);
       bool success = await _auth.signup(signupModel);
       if (success) {
         Get.offAllNamed('/auth/login');

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:habbitable/Services/clubs.dart';
 import 'package:habbitable/Services/upload.dart';
+import 'package:habbitable/models/club/catagory.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreateClubController extends GetxController {
@@ -13,9 +14,18 @@ class CreateClubController extends GetxController {
   RxString selectedImage = RxString('');
   RxBool isLoading = RxBool(false);
   RxBool isUploading = RxBool(false);
+  Rx<Catagory?> selectedCatagory = Rx<Catagory?>(null);
   // Services
   final clubService = Get.find<ClubsService>();
   final uploadService = Get.find<UploadService>();
+
+  final RxList<Catagory> catagories = RxList.empty();
+
+  @override
+  void onInit() {
+    super.onInit();
+    getCatagories();
+  }
 
   //setters
   setIsPrivate(bool value) {
@@ -65,5 +75,10 @@ class CreateClubController extends GetxController {
         imageId.value.isNotEmpty;
 
     return hasStartedFilling;
+  }
+
+  Future<void> getCatagories() async {
+    final catagories = await clubService.getCatagories();
+    this.catagories.value = catagories;
   }
 }

@@ -109,6 +109,7 @@ class _CommentState extends State<Comment> {
                       Icon(
                         LineIcons.heart,
                         size: 15,
+                        color: Get.theme.colorScheme.onPrimary,
                       ),
                       const SizedBox(width: 5),
                       Text(
@@ -130,6 +131,7 @@ class _CommentState extends State<Comment> {
                           Icon(
                             LineIcons.comments,
                             size: 15,
+                            color: Get.theme.colorScheme.onPrimary,
                           ),
                           const SizedBox(width: 5),
                           Text(
